@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marinha do Brasil - Concurso EAM 2026</title>
+    <meta name="description" content="Concurso Público de Admissão às Escolas de Aprendizes-Marinheiros (EAM) 2026 - 850 vagas">
+    <link rel="shortcut icon" href="images/29.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background-color: #0d1b2a;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo-text {
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #c9a227;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b3a5f 50%, #0d1b2a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://ext.same-assets.com/3765513014/3269063839.webp') center/cover;
+            opacity: 0.15;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            color: #c9a227;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .hero-content h1 span {
+            color: white;
+            font-size: 24px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .hashtag {
+            color: #c9a227;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .alert-box {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .alert-box h3 {
+            color: #0d1b2a;
+            font-size: 18px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .alert-box .highlight {
+            color: #c9a227;
+            font-weight: 700;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #0d1b2a;
+            color: white;
+            border: 2px solid #0d1b2a;
+        }
+
+        .btn-primary:hover {
+            background-color: #1b3a5f;
+            border-color: #1b3a5f;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #0d1b2a;
+            border: 2px solid #0d1b2a;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0d1b2a;
+            color: white;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+        }
+
+        /* Info Section */
+        .info-section {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-subtitle {
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            color: #0d1b2a;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .info-card-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0d1b2a, #1b3a5f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .info-card-icon i {
+            font-size: 28px;
+            color: #c9a227;
+        }
+
+        .info-card h4 {
+            color: #0d1b2a;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-card .value {
+            color: #c9a227;
+            font-size: 24px;
+            font-weight: 700;
+            display: block;
+            margin-top: 10px;
+        }
+
+        /* Concurso Details */
+        .concurso-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b3a5f 100%);
+            color: white;
+        }
+
+        .concurso-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .concurso-content h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #c9a227;
+        }
+
+        .concurso-content p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .concurso-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .concurso-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .concurso-list li i {
+            color: #c9a227;
+            font-size: 18px;
+        }
+
+        .concurso-list li strong {
+            color: #c9a227;
+        }
+
+        .concurso-image {
+            position: relative;
+        }
+
+        .concurso-image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0;
+            background-color: #c9a227;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            color: #0d1b2a;
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            color: #0d1b2a;
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .btn-cta {
+            background-color: #0d1b2a;
+            color: white;
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-cta:hover {
+            background-color: #1b3a5f;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #0d1b2a;
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand img {
+            height: 60px;
+        }
+
+        .footer-brand-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .footer-social a:hover {
+            background-color: #c9a227;
+        }
+
+        .footer h4 {
+            color: #c9a227;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer ul a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer ul a:hover {
+            color: #c9a227;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .btn-group {
+                justify-content: center;
+            }
+
+            .concurso-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 28px;
+            }
+
+            .hashtag {
+                font-size: 20px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-social {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="#" class="logo">
+                <img src="images/logo-marinha.png" alt="Marinha do Brasil">
+                <span class="logo-text">MARINHA DO BRASIL</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#concurso">O Concurso</a></li>
+                    <li><a href="#info">Informações</a></li>
+                    <li><a href="#requisitos">Requisitos</a></li>
+                    <li><a href="inicio/inscricao/">Inscreva-se</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <p class="hashtag">#VemPraMarinha</p>
+                <h1>
+                    <span>Concurso Público de Admissão às</span>
+                    ESCOLAS DE APRENDIZES-MARINHEIROS
+                </h1>
+
+                <div class="alert-box">
+                    <h3>
+                        Estão abertas até o dia <span class="highlight">25/02/2026</span>, as inscrições para o Concurso Público de Admissão às Escolas de Aprendizes-Marinheiros <span class="highlight">(CPAEAM)</span> em 2026
+                    </h3>
+                    <div class="btn-group">
+                        <a href="inicio/inscricao/" class="btn btn-primary">Saiba mais...</a>
+                        <a href="inicio/inscricao/" class="btn btn-secondary">Inscreva-se</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://ext.same-assets.com/3765513014/2195772269.png" alt="Oficial da Marinha">
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section" id="info">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-subtitle">Informações do Concurso</p>
+                <h2 class="section-title">Dados Importantes</h2>
+            </div>
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4>Total de Vagas</h4>
+                    <p>Oportunidades para jovens de ambos os sexos</p>
+                    <span class="value">850 vagas</span>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h4>Taxa de Inscrição</h4>
+                    <p>Valor único para todos os candidatos</p>
+                    <span class="value">R$ 53,00</span>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h4>Período de Inscrições</h4>
+                    <p>Não perca o prazo!</p>
+                    <span class="value">27/01 a 25/02/2026</span>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h4>Data da Prova</h4>
+                    <p>Prova escrita objetiva</p>
+                    <span class="value">26/04/2026</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concurso Details -->
+    <section class="concurso-section" id="concurso">
+        <div class="section-container">
+            <div class="concurso-grid">
+                <div class="concurso-content">
+                    <h2>Escola de Aprendizes-Marinheiros</h2>
+                    <p>
+                        O Concurso Público de Admissão às Escolas de Aprendizes-Marinheiros exige o ensino médio
+                        completo ou em conclusão e os aprovados terão formação técnica dentro da Marinha.
+                    </p>
+                    <p>
+                        Os candidatos aprovados e classificados dentro do número de vagas ingressarão no
+                        Curso de Formação de Marinheiros, com duração de um ano, realizado em regime de
+                        internato nas Escolas de Aprendizes-Marinheiros.
+                    </p>
+                    <ul class="concurso-list" id="requisitos">
+                        <li><i class="fas fa-check-circle"></i> <strong>754 vagas</strong> para candidatos do sexo masculino</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>96 vagas</strong> para candidatos do sexo feminino</li>
+                        <li><i class="fas fa-check-circle"></i> Áreas: <strong>Apoio, Eletroeletrônica e Mecânica</strong></li>
+                        <li><i class="fas fa-check-circle"></i> Idade: <strong>18 a 22 anos</strong> até 30/06/2027</li>
+                        <li><i class="fas fa-check-circle"></i> Altura: <strong>1,54m a 2,00m</strong></li>
+                        <li><i class="fas fa-check-circle"></i> Bolsa-auxílio: <strong>R$ 1.303,90</strong> durante o curso</li>
+                        <li><i class="fas fa-check-circle"></i> Após formação: <strong>R$ 2.294,50</strong> como Marinheiro</li>
+                    </ul>
+                    <a href="inicio/inscricao/" class="btn btn-cta" style="background-color: #c9a227; color: #0d1b2a;">
+                        Fazer Inscrição Agora
+                    </a>
+                </div>
+                <div class="concurso-image">
+                    <img src="https://ext.same-assets.com/3765513014/97861082.jpeg" alt="Escola de Aprendizes-Marinheiros">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="section-container">
+            <h2>Não perca essa oportunidade!</h2>
+            <p>Inscrições abertas até 25 de fevereiro de 2026</p>
+            <a href="inicio/inscricao/" class="btn-cta">Realizar Inscrição</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="section-container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        <img src="images/logo-marinha.png" alt="Marinha do Brasil">
+                        <span class="footer-brand-text">MARINHA DO BRASIL</span>
+                    </div>
+                    <p style="opacity: 0.7; font-size: 14px;">Siga a Marinha:</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4>A Marinha</h4>
+                    <ul>
+                        <li><a href="#">Missão e Visão de Futuro</a></li>
+                        <li><a href="#">Comandante da Marinha</a></li>
+                        <li><a href="#">História Naval</a></li>
+                        <li><a href="#">Tradições Navais</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Links Úteis</h4>
+                    <ul>
+                        <li><a href="#">Amazônia Azul</a></li>
+                        <li><a href="#">Programa de Submarinos</a></li>
+                        <li><a href="#">Programas Estratégicos</a></li>
+                        <li><a href="#">Postos e Graduações</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Serviços</h4>
+                    <ul>
+                        <li><a href="#">Ouvidoria</a></li>
+                        <li><a href="#">Área de Imprensa</a></li>
+                        <li><a href="inicio/inscricao/">Inscrições</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; Copyright - Desenvolvido pelo Centro de Comunicação Estratégica da Marinha</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

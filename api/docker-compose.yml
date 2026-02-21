@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - PORT=3000
+      - MANGOFY_API_KEY=${MANGOFY_API_KEY}
+      - MANGOFY_STORE_CODE=${MANGOFY_STORE_CODE}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:5173}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+    restart: unless-stopped
+    # Desabilitar IPv6 no container para forçar uso de IPv4
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
+    # Usar apenas IPv4 para DNS
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

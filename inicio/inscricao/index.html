@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="pt-BR">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Marinha do Brasil - Inscrição para Concursos 2026</title>
+
+        <script src="../js/concursos-marinha.js"></script>
+        <link href="../css/all.min.css" rel="stylesheet" />
+        <link href="../css/home.css" rel="stylesheet" />
+
+        <style>
+            :root {
+                --marinha-primary: #003366;
+                --marinha-secondary: #004080;
+                --marinha-dark: #002244;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Rawline', ui-sans-serif, system-ui, sans-serif;
+                margin: 0;
+                background-color: #f5f7fa;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .flex-grow { flex-grow: 1; }
+            .container { max-width: 900px; margin: 0 auto; padding: 0 1rem; }
+
+            /* Header */
+            .header {
+                background-color: var(--marinha-primary);
+                padding: 0.75rem 0;
+            }
+            .header-content {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .header img {
+                width: 50px;
+                height: 50px;
+                object-fit: contain;
+            }
+            .header-title {
+                color: white;
+                font-weight: 700;
+                font-size: 1.1rem;
+            }
+
+            /* Main Content */
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            /* Info Banner */
+            .info-banner {
+                background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+                border-left: 4px solid var(--marinha-primary);
+                border-radius: 8px;
+                padding: 1.25rem;
+                margin-bottom: 1.5rem;
+            }
+            .info-banner-header {
+                display: flex;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+            .info-banner-icon {
+                color: var(--marinha-primary);
+                font-size: 1.5rem;
+                flex-shrink: 0;
+            }
+            .info-banner h3 {
+                color: var(--marinha-primary);
+                font-size: 1.1rem;
+                font-weight: 700;
+                margin: 0 0 0.5rem 0;
+            }
+            .info-banner p {
+                color: #333;
+                margin: 0 0 1rem 0;
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+
+            /* Concurso Info Card */
+            .concurso-info-card {
+                background: white;
+                border-radius: 8px;
+                padding: 1rem;
+                margin-top: 1rem;
+                border: 1px solid #e0e0e0;
+            }
+            .concurso-info-card.hidden {
+                display: none;
+            }
+            .concurso-info-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 0.75rem;
+            }
+            .concurso-info-item {
+                padding: 0.5rem;
+            }
+            .concurso-info-label {
+                font-size: 0.75rem;
+                color: #666;
+                text-transform: uppercase;
+                font-weight: 600;
+                margin-bottom: 0.25rem;
+            }
+            .concurso-info-value {
+                font-size: 0.95rem;
+                color: #333;
+                font-weight: 500;
+            }
+            .concurso-info-value.highlight {
+                color: var(--marinha-primary);
+                font-weight: 700;
+            }
+
+            /* Form Card */
+            .form-card {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                overflow: hidden;
+            }
+            .form-header {
+                background: var(--marinha-primary);
+                color: white;
+                padding: 1rem 1.25rem;
+                text-align: center;
+            }
+            .form-header h2 {
+                margin: 0;
+                font-size: 1.15rem;
+                font-weight: 600;
+            }
+            .form-body {
+                padding: 1.5rem;
+            }
+            .form-intro {
+                color: #555;
+                margin-bottom: 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            /* Form Fields */
+            .form-group {
+                margin-bottom: 1.25rem;
+            }
+            .form-label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+                color: #333;
+                font-size: 0.95rem;
+            }
+            .form-label .required {
+                color: #dc2626;
+                margin-left: 2px;
+            }
+            .form-select, .form-input {
+                width: 100%;
+                padding: 0.75rem 1rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                font-size: 1rem;
+                color: #333;
+                background: white;
+                transition: border-color 0.2s;
+            }
+            .form-select:focus, .form-input:focus {
+                outline: none;
+                border-color: var(--marinha-primary);
+            }
+            .form-select:disabled {
+                background: #f5f5f5;
+                cursor: not-allowed;
+            }
+
+            /* Captcha */
+            .captcha-section {
+                margin-bottom: 1.25rem;
+            }
+            .captcha-label {
+                font-weight: 600;
+                color: var(--marinha-primary);
+                margin-bottom: 0.5rem;
+                font-size: 0.95rem;
+            }
+            .captcha-label .required {
+                color: #dc2626;
+            }
+            .captcha-grid {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 0.25rem;
+                background: #d8e8e8;
+                padding: 0.25rem;
+                border: 4px solid #d8e8e8;
+                max-width: 300px;
+            }
+            .captcha-option {
+                background: #d2d2d2;
+                padding: 0.5rem;
+                border: 1px solid white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s;
+                opacity: 1;
+            }
+            .captcha-option:hover {
+                background: #c0c0c0;
+            }
+            .captcha-option.selected {
+                border: 3px dashed #2b7a9a;
+            }
+            .captcha-option.transparent {
+                opacity: 0.5;
+            }
+            .captcha-option img {
+                width: 24px;
+                height: 24px;
+            }
+
+            /* Form Footer */
+            .form-footer {
+                border-top: 1px solid #e0e0e0;
+                display: flex;
+                flex-direction: column;
+            }
+            .form-footer-top {
+                padding: 0.75rem 1rem;
+                background: #f8f9fa;
+            }
+            .back-link {
+                color: #555;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 0.9rem;
+            }
+            .back-link:hover {
+                color: var(--marinha-primary);
+            }
+            .submit-button {
+                width: 100%;
+                padding: 1rem;
+                background: var(--marinha-primary);
+                color: rgba(255,255,255,0.5);
+                border: none;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: not-allowed;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                transition: all 0.2s;
+            }
+            .submit-button:not([disabled]) {
+                color: white;
+                cursor: pointer;
+            }
+            .submit-button:not([disabled]):hover {
+                background: var(--marinha-dark);
+            }
+
+            /* Footer */
+            .footer {
+                background: var(--marinha-primary);
+                color: white;
+                padding: 1rem;
+            }
+            .footer-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+            .footer-logo {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .footer-logo img {
+                width: 40px;
+                height: 40px;
+                object-fit: contain;
+            }
+
+            /* Popups */
+            .popup {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 100;
+            }
+            .popup.hidden {
+                display: none;
+            }
+            .popup-overlay {
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+            }
+            .popup-content {
+                position: relative;
+                z-index: 1;
+                background: var(--marinha-primary);
+                color: white;
+                padding: 2rem;
+                border-radius: 12px;
+                text-align: center;
+                max-width: 400px;
+                margin: 1rem;
+            }
+            .popup-content h3 {
+                font-size: 1.25rem;
+                margin: 1rem 0 0.5rem;
+            }
+            .popup-content p {
+                margin: 0;
+                opacity: 0.9;
+            }
+
+            /* Error Banner */
+            .error-banner {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: #dc2626;
+                color: white;
+                padding: 1rem;
+                text-align: center;
+                z-index: 100;
+                font-weight: 500;
+            }
+            .error-banner.hidden {
+                display: none;
+            }
+
+            /* Spinner */
+            .spinner {
+                animation: spin 1s linear infinite;
+            }
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+
+            /* Responsive */
+            @media (max-width: 640px) {
+                .concurso-info-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+                .footer-content {
+                    flex-direction: column;
+                    text-align: center;
+                }
+            }
+        </style>
+
+        <script>
+            // Estado global
+            let selectedConcurso = null;
+            let selectedCargo = null;
+
+            // Inicialização
+            document.addEventListener('DOMContentLoaded', function() {
+                // Pegar concurso da URL se existir
+                const urlParams = new URLSearchParams(window.location.search);
+                const concursoId = urlParams.get('concurso');
+
+                populateConcursoSelect();
+
+                if (concursoId) {
+                    const select = document.getElementById('concurso-select');
+                    select.value = concursoId;
+                    onConcursoChange();
+                }
+
+                checkFormValidity();
+            });
+
+            function populateConcursoSelect() {
+                const select = document.getElementById('concurso-select');
+
+                if (window.CONCURSOS_MARINHA) {
+                    window.CONCURSOS_MARINHA.forEach(concurso => {
+                        const option = document.createElement('option');
+                        option.value = concurso.id;
+                        option.textContent = concurso.nome;
+                        select.appendChild(option);
+                    });
+                }
+            }
+
+            function onConcursoChange() {
+                const select = document.getElementById('concurso-select');
+                const cargoSelect = document.getElementById('cargo-select');
+                const infoCard = document.getElementById('concurso-info-card');
+
+                const concursoId = select.value;
+                selectedConcurso = window.getConcursoById(concursoId);
+
+                // Limpar cargos
+                cargoSelect.innerHTML = '<option value="">Selecione um cargo...</option>';
+                cargoSelect.disabled = true;
+                selectedCargo = null;
+
+                if (selectedConcurso) {
+                    // Mostrar informações do concurso
+                    infoCard.classList.remove('hidden');
+                    updateConcursoInfo();
+
+                    // Popular cargos
+                    selectedConcurso.cargos.forEach(cargo => {
+                        const option = document.createElement('option');
+                        option.value = cargo.id;
+                        option.textContent = cargo.nome + (cargo.vagas ? ` (${cargo.vagas} vagas)` : '');
+                        cargoSelect.appendChild(option);
+                    });
+                    cargoSelect.disabled = false;
+                } else {
+                    infoCard.classList.add('hidden');
+                }
+
+                checkFormValidity();
+            }
+
+            function onCargoChange() {
+                const cargoSelect = document.getElementById('cargo-select');
+                const cargoId = cargoSelect.value;
+
+                if (selectedConcurso && cargoId) {
+                    selectedCargo = selectedConcurso.cargos.find(c => c.id === cargoId);
+                } else {
+                    selectedCargo = null;
+                }
+
+                checkFormValidity();
+            }
+
+            function updateConcursoInfo() {
+                if (!selectedConcurso) return;
+
+                document.getElementById('info-vagas').textContent = selectedConcurso.vagas ?
+                    `${selectedConcurso.vagas} vagas` : 'Cadastro Reserva';
+                document.getElementById('info-taxa').textContent =
+                    `R$ ${selectedConcurso.taxaInscricao.toFixed(2).replace('.', ',')}`;
+                document.getElementById('info-salario').textContent = selectedConcurso.salarioApos;
+                document.getElementById('info-escolaridade').textContent = selectedConcurso.escolaridade;
+                document.getElementById('info-inscricao').textContent =
+                    `${selectedConcurso.inscricaoInicio} a ${selectedConcurso.inscricaoFim}`;
+                document.getElementById('info-prova').textContent = selectedConcurso.provaData;
+            }
+
+            // Formatação de CPF
+            function formatCPF(input) {
+                let value = (input.value || "").replace(/\D/g, "");
+                if (value.length > 11) value = value.substring(0, 11);
+
+                if (value.length > 9) {
+                    value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+                } else if (value.length > 6) {
+                    value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
+                } else if (value.length > 3) {
+                    value = value.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+                }
+                input.value = value;
+                checkFormValidity();
+            }
+
+            function unformatCPF(cpf) {
+                return (cpf || "").replace(/\D/g, "");
+            }
+
+            // Captcha
+            function selectCaptchaImage(element, index) {
+                const images = document.querySelectorAll(".captcha-option");
+                images.forEach((img) => {
+                    img.classList.remove("selected");
+                    img.classList.add("transparent");
+                });
+                element.classList.add("selected");
+                element.classList.remove("transparent");
+
+                if (index !== 4) {
+                    showErrorPopup();
+                }
+                checkFormValidity();
+            }
+
+            function showErrorPopup() {
+                const popup = document.getElementById("error-popup");
+                if (popup) {
+                    popup.classList.remove("hidden");
+                    setTimeout(() => popup.classList.add("hidden"), 3000);
+                }
+            }
+
+            function showValidationPopup() {
+                const popup = document.getElementById("validation-popup");
+                if (popup) popup.classList.remove("hidden");
+            }
+
+            function hideValidationPopup() {
+                const popup = document.getElementById("validation-popup");
+                if (popup) popup.classList.add("hidden");
+            }
+
+            // Validação do formulário
+            function checkFormValidity() {
+                const cpfInput = document.querySelector("#cpf");
+                const concursoSelect = document.getElementById('concurso-select');
+                const cargoSelect = document.getElementById('cargo-select');
+                const selectedImage = document.querySelector(".captcha-option.selected");
+                const submitButton = document.querySelector("#submit-button");
+
+                const cpfOk = unformatCPF(cpfInput?.value).length === 11;
+                const concursoOk = concursoSelect?.value !== "";
+                const cargoOk = cargoSelect?.value !== "";
+                const folhaOk = selectedImage && selectedImage === document.querySelectorAll(".captcha-option")[4];
+
+                if (submitButton) {
+                    submitButton.disabled = !(cpfOk && concursoOk && cargoOk && folhaOk);
+                }
+            }
+
+            // Submissão do formulário
+            async function submitForm() {
+                const cpfInput = document.querySelector("#cpf");
+                const submitButton = document.querySelector("#submit-button");
+                const cpf = unformatCPF(cpfInput.value);
+
+                if (!cpf || cpf.length !== 11) {
+                    alert("CPF inválido. Verifique e tente novamente.");
+                    return;
+                }
+
+                if (!selectedConcurso || !selectedCargo) {
+                    alert("Selecione o concurso e o cargo desejado.");
+                    return;
+                }
+
+                showValidationPopup();
+                submitButton.disabled = true;
+
+                const controller = new AbortController();
+                const timeoutMs = 15000;
+                const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+                try {
+                    const response = await fetch(
+                        `/inicio/inscricao/cpf.php?cpf=${cpf}`,
+                        {
+                            method: "GET",
+                            signal: controller.signal,
+                            headers: {
+                                "Accept": "application/json"
+                            }
+                        }
+                    );
+
+                    if (!response.ok) {
+                        let bodyText = "";
+                        try { bodyText = await response.text(); } catch {}
+                        throw new Error(`Erro na consulta. Status ${response.status}. Corpo: ${bodyText}`);
+                    }
+
+                    const output = await response.json();
+                    const pessoa = output?.data;
+                    if (!pessoa) throw new Error("CPF não encontrado ou resposta com formato inesperado.");
+
+                    const nome = pessoa.NOME ?? "";
+                    const dataNascimento = pessoa.NASC ?? "";
+
+                    if (!nome) throw new Error("Campo de nome não encontrado na resposta.");
+
+                    // Armazenar dados incluindo concurso e cargo
+                    const dataFormatada = {
+                        dados: [{
+                            NOME: nome,
+                            NASC: dataNascimento,
+                            CPF: cpf,
+                            nome_da_pf: nome,
+                            data_nascimento: dataNascimento,
+                            cpf: cpf
+                        }],
+                        DADOS: {
+                            NOME: nome,
+                            NASC: dataNascimento,
+                            CPF: cpf,
+                            nome_da_pf: nome,
+                            data_nascimento: dataNascimento,
+                            cpf: cpf
+                        },
+                        concurso: {
+                            id: selectedConcurso.id,
+                            nome: selectedConcurso.nome,
+                            sigla: selectedConcurso.sigla,
+                            taxaInscricao: selectedConcurso.taxaInscricao,
+                            escolaridade: selectedConcurso.escolaridade
+                        },
+                        cargo: {
+                            id: selectedCargo.id,
+                            nome: selectedCargo.nome,
+                            categoria: selectedCargo.categoria || null,
+                            vagas: selectedCargo.vagas,
+                            salario: selectedCargo.salario
+                        }
+                    };
+
+                    localStorage.setItem("cpfData", JSON.stringify(dataFormatada));
+
+                    hideValidationPopup();
+                    setTimeout(() => { window.location.href = "../validar-dados/"; }, 800);
+
+                } catch (error) {
+                    if (error.name === "AbortError") {
+                        alert("A consulta demorou demais. Tente novamente.");
+                    } else if (error instanceof TypeError || (error.message && error.message.includes("Failed to fetch"))) {
+                        alert("Erro de conexão com a API. Verifique sua conexão e tente novamente.");
+                    } else {
+                        alert("Ocorreu um erro ao validar o CPF. Verifique o console para mais detalhes.");
+                    }
+                    hideValidationPopup();
+                } finally {
+                    clearTimeout(timeoutId);
+                    submitButton.disabled = false;
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content" style="justify-content: center;">
+                    <img src="../images/logo-marinha.png" alt="Logo Marinha do Brasil" style="width: auto; height: 50px;" />
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow main-content">
+            <div class="container">
+                <!-- Info Banner -->
+                <div class="info-banner">
+                    <div class="info-banner-header">
+                        <i class="fas fa-info-circle info-banner-icon"></i>
+                        <div>
+                            <h3>SISTEMA DE INSCRIÇÃO - CONCURSOS MARINHA 2026</h3>
+                            <p>
+                                Bem-vindo(a) ao sistema de inscrição para os concursos da Marinha do Brasil.
+                                Selecione o concurso e o cargo desejado para visualizar as informações e realizar sua inscrição.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Concurso Info Card -->
+                    <div class="concurso-info-card hidden" id="concurso-info-card">
+                        <div class="concurso-info-grid">
+                            <div class="concurso-info-item">
+                                <div class="concurso-info-label">Vagas</div>
+                                <div class="concurso-info-value highlight" id="info-vagas">-</div>
+                            </div>
+                            <div class="concurso-info-item">
+                                <div class="concurso-info-label">Taxa de Inscrição</div>
+                                <div class="concurso-info-value highlight" id="info-taxa">-</div>
+                            </div>
+                            <div class="concurso-info-item">
+                                <div class="concurso-info-label">Salário</div>
+                                <div class="concurso-info-value highlight" id="info-salario">-</div>
+                            </div>
+                            <div class="concurso-info-item">
+                                <div class="concurso-info-label">Escolaridade</div>
+                                <div class="concurso-info-value" id="info-escolaridade">-</div>
+                            </div>
+                            <div class="concurso-info-item">
+                                <div class="concurso-info-label">Período de Inscrição</div>
+                                <div class="concurso-info-value" id="info-inscricao">-</div>
+                            </div>
+                            <div class="concurso-info-item">
+                                <div class="concurso-info-label">Data da Prova</div>
+                                <div class="concurso-info-value" id="info-prova">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Card -->
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2>Formulário de Inscrição - Concursos Marinha do Brasil</h2>
+                    </div>
+
+                    <div class="form-body">
+                        <p class="form-intro">
+                            Preencha os campos abaixo para realizar sua inscrição. Todos os campos marcados com <span style="color: #dc2626;">*</span> são obrigatórios.
+                        </p>
+
+                        <form onsubmit="event.preventDefault(); submitForm();">
+                            <!-- Concurso Select -->
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Concurso <span class="required">*</span>
+                                </label>
+                                <select
+                                    id="concurso-select"
+                                    class="form-select"
+                                    onchange="onConcursoChange()"
+                                >
+                                    <option value="">Selecione o concurso...</option>
+                                </select>
+                            </div>
+
+                            <!-- Cargo Select -->
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Cargo/Área <span class="required">*</span>
+                                </label>
+                                <select
+                                    id="cargo-select"
+                                    class="form-select"
+                                    onchange="onCargoChange()"
+                                    disabled
+                                >
+                                    <option value="">Selecione um cargo...</option>
+                                </select>
+                            </div>
+
+                            <!-- CPF Input -->
+                            <div class="form-group">
+                                <label class="form-label">
+                                    CPF <span class="required">*</span>
+                                </label>
+                                <input
+                                    id="cpf"
+                                    type="tel"
+                                    inputmode="numeric"
+                                    class="form-input"
+                                    placeholder="___.___.___-__"
+                                    oninput="formatCPF(this)"
+                                />
+                            </div>
+
+                            <!-- Captcha -->
+                            <div class="captcha-section">
+                                <p class="captcha-label">
+                                    Clique abaixo, na figura FOLHA: <span class="required">*</span>
+                                </p>
+                                <div class="captcha-grid">
+                                    <div class="captcha-option" onclick="selectCaptchaImage(this, 0)">
+                                        <img alt="Globe" src="../images/download-6.png" />
+                                    </div>
+                                    <div class="captcha-option" onclick="selectCaptchaImage(this, 1)">
+                                        <img alt="Magnifier" src="../images/download-5.png" />
+                                    </div>
+                                    <div class="captcha-option" onclick="selectCaptchaImage(this, 2)">
+                                        <img alt="Footprint" src="../images/download-4.png" />
+                                    </div>
+                                    <div class="captcha-option" onclick="selectCaptchaImage(this, 3)">
+                                        <img alt="Lock" src="../images/download-3.png" />
+                                    </div>
+                                    <div class="captcha-option" onclick="selectCaptchaImage(this, 4)">
+                                        <img alt="Leaf" src="../images/leaf.png" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="form-footer">
+                        <div class="form-footer-top">
+                            <a href="../inicio.html" class="back-link">
+                                <i class="fas fa-arrow-left"></i>
+                                Voltar aos Concursos
+                            </a>
+                        </div>
+                        <button
+                            id="submit-button"
+                            class="submit-button"
+                            type="button"
+                            disabled
+                            onclick="submitForm()"
+                        >
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Enviar Inscrição</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <img src="../images/logo-marinha.png" alt="Marinha do Brasil" />
+                        <span>Marinha do Brasil - SSPM</span>
+                    </div>
+                    <div>
+                        <i class="fas fa-globe"></i> www.marinha.mil.br
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Error Popup -->
+        <div id="error-popup" class="error-banner hidden">
+            Você deve selecionar a imagem da FOLHA (5ª imagem) para prosseguir.
+        </div>
+
+        <!-- Validation Popup -->
+        <div id="validation-popup" class="popup hidden">
+            <div class="popup-overlay"></div>
+            <div class="popup-content">
+                <svg class="spinner" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                    <path d="M4 12a8 8 0 0 1 8-8" stroke-opacity="1"/>
+                </svg>
+                <h3>Validando seus dados...</h3>
+                <p>Aguarde enquanto verificamos as informações do CPF.</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -6,7 +6,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <title>Marinha do Brasil - Cidade de Prova</title>
 
-
+        <script src="../js/concursos-marinha.js"></script>
         <script src="https://cdn.tailwindcss.com/3.3.0"></script>
         <link href="../css/all.min.css" rel="stylesheet" />
         <link href="../css/home.css" rel="stylesheet" />
@@ -95,21 +95,58 @@
                     element.textContent = addressData.uf || "";
                 });
 
-                // Cargo fixo para EAM 2026 (não há select, cargo já está definido)
-                const cargoFixo = {
-                    id: "gcm-sp-2026",
-                    nome: "Aprendiz-Marinheiro 3ª Classe",
-                    taxa: 9800, // R$ 98,00 em centavos
-                    nivel: "medio"
+                // Obter concurso selecionado da URL ou localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                const concursoId = urlParams.get('concurso') || localStorage.getItem('concursoSelecionado') || 'eam';
+
+                // Buscar dados do concurso
+                const concurso = window.getConcursoById ? window.getConcursoById(concursoId) : null;
+
+                // Dados padrão caso não encontre o concurso
+                const concursoDefault = {
+                    id: "eam",
+                    nome: "Escolas de Aprendizes-Marinheiros (EAM)",
+                    sigla: "EAM",
+                    descricao: "Concurso de Admissão às Escolas de Aprendizes-Marinheiros 2026",
+                    taxaInscricao: 40.00,
+                    vagas: 850,
+                    salarioApos: "R$ 2.294,50",
+                    escolaridade: "Ensino Médio Completo ou em Conclusão",
+                    provaData: "26/04/2026"
                 };
 
-                // Salvar cargo fixo no localStorage
-                localStorage.setItem("cargoPretendido", cargoFixo.id);
-                localStorage.setItem("cargoPretendidoTexto", cargoFixo.nome);
-                localStorage.setItem("taxaInscricao", cargoFixo.taxa.toString());
-                localStorage.setItem("nivelCargo", cargoFixo.nivel);
+                const concursoData = concurso || concursoDefault;
 
-                console.log("📋 Cargo fixo configurado:", cargoFixo);
+                // Atualizar container de cargo selecionado
+                const cargoNomeDisplay = document.getElementById("cargo-nome-display");
+                const cargoDetalhesDisplay = document.getElementById("cargo-detalhes-display");
+                const cargoInfoDisplay = document.getElementById("cargo-info-display");
+                const concursoSiglaDisplay = document.getElementById("concurso-sigla");
+
+                if (cargoNomeDisplay) {
+                    cargoNomeDisplay.innerHTML = `<strong>${concursoData.nome}</strong><br><small class="text-gray-500">${concursoData.descricao}</small>`;
+                }
+
+                if (cargoDetalhesDisplay) {
+                    cargoDetalhesDisplay.textContent = `Salário: ${concursoData.salarioApos} | Vagas: ${concursoData.vagas || 'Diversas'}`;
+                }
+
+                if (cargoInfoDisplay) {
+                    cargoInfoDisplay.textContent = `Escolaridade: ${concursoData.escolaridade} | Prova: ${concursoData.provaData}`;
+                }
+
+                if (concursoSiglaDisplay) {
+                    concursoSiglaDisplay.textContent = concursoData.sigla;
+                }
+
+                // Salvar dados do concurso no localStorage
+                localStorage.setItem("concursoSelecionado", concursoData.id);
+                localStorage.setItem("cargoPretendido", concursoData.id);
+                localStorage.setItem("cargoPretendidoTexto", concursoData.nome);
+                localStorage.setItem("taxaInscricao", (concursoData.taxaInscricao * 100).toString());
+                localStorage.setItem("nivelCargo", concursoData.escolaridade.includes("Superior") ? "superior" : "medio");
+
+                console.log("📋 Concurso carregado:", concursoData);
 
                 const emailInput = document.getElementById("email-confirmacao");
                 emailInput.addEventListener("input", updateSubmitButton);
@@ -225,15 +262,19 @@
                                 <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                                     <h4 class="font-bold text-green-800 mb-2 flex items-center">
                                         <i class="fas fa-check-circle text-green-600 mr-2"></i>
-                                        Cargo Selecionado
+                                        Concurso Selecionado
+                                        <span id="concurso-sigla" class="ml-2 px-2 py-0.5 bg-green-600 text-white text-xs rounded">EAM</span>
                                     </h4>
                                     <div class="bg-white p-3 rounded border">
-                                        <div class="font-medium text-gray-800 mb-1" id="cargo-nome-display"><strong>Aprendiz-Marinheiro 3ª Classe</strong><br><small class="text-gray-500">Processo Seletivo EAM 2026 2026</small></div>
-                                        <div class="text-sm text-gray-600">
-                                            Salário: R$4.127,14 | Vagas: 500
+                                        <div class="font-medium text-gray-800 mb-1" id="cargo-nome-display">
+                                            <strong>Escolas de Aprendizes-Marinheiros (EAM)</strong><br>
+                                            <small class="text-gray-500">Concurso de Admissão às Escolas de Aprendizes-Marinheiros 2026</small>
                                         </div>
-                                        <div class="text-xs text-gray-500 mt-1">
-                                            Banca: Marinha do Brasil | Prova: 26 de abril de 2026
+                                        <div class="text-sm text-gray-600" id="cargo-detalhes-display">
+                                            Salário: R$ 2.294,50 | Vagas: 850
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-1" id="cargo-info-display">
+                                            Escolaridade: Ensino Médio Completo ou em Conclusão | Prova: 26/04/2026
                                         </div>
                                     </div>
                                 </div>

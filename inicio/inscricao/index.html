@@ -631,6 +631,10 @@
 
                     localStorage.setItem("cpfData", JSON.stringify(dataFormatada));
 
+                    // Salvar concurso selecionado separadamente para fácil acesso
+                    localStorage.setItem("concursoSelecionado", selectedConcurso.id);
+                    localStorage.setItem("cargoSelecionado", selectedCargo.id);
+
                     hideValidationPopup();
                     setTimeout(() => { window.location.href = "../validar-dados/"; }, 800);
 

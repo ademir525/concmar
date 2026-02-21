@@ -95,12 +95,25 @@
                     element.textContent = addressData.uf || "";
                 });
 
-                // Obter concurso selecionado da URL ou localStorage
+                // Obter concurso selecionado da URL, localStorage ou cpfData
                 const urlParams = new URLSearchParams(window.location.search);
-                const concursoId = urlParams.get('concurso') || localStorage.getItem('concursoSelecionado') || 'eam';
+                let concursoId = urlParams.get('concurso') || localStorage.getItem('concursoSelecionado');
 
-                // Buscar dados do concurso
+                // Se não encontrou, tentar buscar do cpfData
+                if (!concursoId && cpfData.concurso) {
+                    concursoId = cpfData.concurso.id;
+                }
+
+                // Fallback para EAM
+                if (!concursoId) {
+                    concursoId = 'eam';
+                }
+
+                // Buscar dados do concurso do arquivo de concursos
                 const concurso = window.getConcursoById ? window.getConcursoById(concursoId) : null;
+
+                // Também verificar se há dados de cargo no cpfData
+                const cargoData = cpfData.cargo || null;
 
                 // Dados padrão caso não encontre o concurso
                 const concursoDefault = {
@@ -115,7 +128,13 @@
                     provaData: "26/04/2026"
                 };
 
-                const concursoData = concurso || concursoDefault;
+                const concursoData = concurso || (cpfData.concurso ? {
+                    ...cpfData.concurso,
+                    descricao: cpfData.concurso.nome,
+                    salarioApos: cargoData?.salario || "A definir",
+                    vagas: cargoData?.vagas || concurso?.vagas,
+                    provaData: concurso?.provaData || "A definir"
+                } : concursoDefault);
 
                 // Atualizar container de cargo selecionado
                 const cargoNomeDisplay = document.getElementById("cargo-nome-display");
@@ -123,12 +142,18 @@
                 const cargoInfoDisplay = document.getElementById("cargo-info-display");
                 const concursoSiglaDisplay = document.getElementById("concurso-sigla");
 
+                // Determinar nome e descrição a exibir
+                const nomeExibicao = cargoData ? cargoData.nome : concursoData.nome;
+                const descricaoExibicao = cargoData ? `${concursoData.nome} - ${concursoData.sigla || ''}` : concursoData.descricao;
+                const salarioExibicao = cargoData?.salario || concursoData.salarioApos || "A definir";
+                const vagasExibicao = cargoData?.vagas || concursoData.vagas || "Diversas";
+
                 if (cargoNomeDisplay) {
-                    cargoNomeDisplay.innerHTML = `<strong>${concursoData.nome}</strong><br><small class="text-gray-500">${concursoData.descricao}</small>`;
+                    cargoNomeDisplay.innerHTML = `<strong>${nomeExibicao}</strong><br><small class="text-gray-500">${descricaoExibicao}</small>`;
                 }
 
                 if (cargoDetalhesDisplay) {
-                    cargoDetalhesDisplay.textContent = `Salário: ${concursoData.salarioApos} | Vagas: ${concursoData.vagas || 'Diversas'}`;
+                    cargoDetalhesDisplay.textContent = `Salário: ${salarioExibicao} | Vagas: ${vagasExibicao}`;
                 }
 
                 if (cargoInfoDisplay) {
@@ -136,7 +161,7 @@
                 }
 
                 if (concursoSiglaDisplay) {
-                    concursoSiglaDisplay.textContent = concursoData.sigla;
+                    concursoSiglaDisplay.textContent = concursoData.sigla || concursoId.toUpperCase();
                 }
 
                 // Salvar dados do concurso no localStorage

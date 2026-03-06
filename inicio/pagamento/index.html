@@ -5,6 +5,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport" />
         <title>Marinha do Brasil - EAM 2026 - Pagamento PIX</title>
 
+        <script src="../js/utm-tracker.js"></script>
         <script src="../../config-site.js"></script>
         <script src="../../3.4.16.js"></script>
         <link href="../css/all.min.css" rel="stylesheet" />
@@ -532,6 +533,10 @@
                     console.log("Email para pagamento:", email);
                     console.log("Valor da taxa:", TAXA_VALOR, "centavos");
 
+                    // Capturar UTMs para enviar junto com o pagamento
+                    const utmData = window.UTMTracker ? window.UTMTracker.getAll() : {};
+                    console.log("UTMs capturados:", utmData);
+
                     const response = await fetch(`${API_URL}/pix/generate`, {
                         method: "POST",
                         headers: {
@@ -544,6 +549,17 @@
                             phone: userData.TELEFONE || "",
                             amount: TAXA_VALOR,
                             description: DESCRICAO,
+                            // UTM parameters para rastreamento UTMify
+                            utm_source: utmData.utm_source || null,
+                            utm_campaign: utmData.utm_campaign || null,
+                            utm_medium: utmData.utm_medium || null,
+                            utm_term: utmData.utm_term || null,
+                            utm_content: utmData.utm_content || null,
+                            gclid: utmData.gclid || null,
+                            fbclid: utmData.fbclid || null,
+                            // Metadados adicionais
+                            landing_page: utmData._landing_page || null,
+                            referrer: utmData._referrer || null,
                         }),
                     });
 

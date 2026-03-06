@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <meta name="referrer" content="no-referrer" />
+        <title>Inscrição Confirmada - Marinha do Brasil</title>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="../css/all.min.css" rel="stylesheet" />
+        <link href="../css/home.css" rel="stylesheet" />
+
+        <style>
+            .gov-header {
+                background-color: #003366;
+            }
+            .inep-header {
+                background-color: #003366;
+            }
+            .form-header {
+                background-color: #003366;
+                color: white;
+                font-weight: 600;
+            }
+            .success-icon {
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.05);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            .footer-bg {
+                background-color: #003366;
+            }
+        </style>
+    </head>
+
+    <body class="flex flex-col min-h-screen">
+
+        <div class="inep-header py-2">
+            <div class="container mx-auto px-4 flex justify-center">
+                <img
+                    src="../images/logo-marinha.png"
+                    alt="Marinha do Brasil"
+                    style="height: 50px; width: auto; object-fit: contain"
+                />
+            </div>
+        </div>
+
+        <main class="flex-grow py-8" style="padding-top:10px!important">
+            <div class="container mx-auto px-4 max-w-3xl">
+                <div class="border border-gray-300 rounded">
+                    <div class="form-header py-2 px-4 text-center">
+                        <h2 class="text-lg">
+                            Inscrição &gt; Confirmação
+                        </h2>
+                    </div>
+
+                    <div class="p-6">
+                        <!-- Dados do candidato -->
+                        <div class="bg-[#003366] p-4 rounded-md mb-5 text-white shadow-md">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-2">
+                                    <p class="text-sm text-gray-200">CPF:</p>
+                                    <p id="cpf-display" class="font-semibold text-shadow">Carregando...</p>
+                                </div>
+                                <div class="p-2">
+                                    <p class="text-sm text-gray-200">Nome Completo:</p>
+                                    <p id="nome-display" class="font-semibold text-shadow">Carregando...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mensagem de sucesso -->
+                        <div class="text-center mb-6">
+                            <div class="success-icon mb-4">
+                                <div class="bg-green-100 p-6 rounded-full inline-flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-600 text-6xl"></i>
+                                </div>
+                            </div>
+
+                            <h3 class="text-2xl font-bold text-green-600 mb-2">
+                                Pagamento Confirmado!
+                            </h3>
+                            <p class="text-gray-600" id="success-message">
+                                Sua inscrição foi confirmada com sucesso.
+                            </p>
+                        </div>
+
+                        <!-- Código de confirmação -->
+                        <div class="bg-gradient-to-r from-[#003366] to-[#004080] border-4 border-[#003366] rounded-lg p-6 mb-6 shadow-xl">
+                            <div class="flex items-center justify-center mb-3">
+                                <i class="fas fa-shield-alt text-white text-3xl mr-3"></i>
+                                <h4 class="font-bold text-white text-xl">
+                                    Código de Confirmação da Inscrição
+                                </h4>
+                            </div>
+
+                            <div class="bg-white rounded-lg p-4 mb-3">
+                                <p class="text-center text-4xl font-mono font-bold text-[#003366] tracking-widest" id="confirmation-code">
+                                    GERANDO...
+                                </p>
+                            </div>
+
+                            <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-3 mb-3">
+                                <p class="text-yellow-900 font-semibold text-center text-sm">
+                                    IMPORTANTE: Guarde este código em local seguro!
+                                </p>
+                            </div>
+
+                            <div class="text-white text-sm text-center space-y-1">
+                                <p>Este é seu código oficial de inscrição</p>
+                                <p>Pode ser solicitado para consultas e comprovação</p>
+                                <p>Anote ou tire um print desta tela</p>
+                            </div>
+                        </div>
+
+                        <!-- Detalhes da inscrição -->
+                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                            <h4 class="font-semibold text-gray-800 mb-3">
+                                <i class="fas fa-file-alt text-[#003366] mr-2"></i>
+                                Detalhes da Inscrição
+                            </h4>
+                            <div class="text-sm text-gray-600 space-y-2">
+                                <div class="flex justify-between py-1 border-b border-gray-200">
+                                    <span>Concurso:</span>
+                                    <span class="font-medium text-gray-800" id="detail-concurso">Carregando...</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-gray-200">
+                                    <span>Cargo:</span>
+                                    <span class="font-medium text-gray-800" id="detail-cargo">Carregando...</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-gray-200">
+                                    <span>Valor pago:</span>
+                                    <span class="font-medium text-gray-800" id="payment-value">R$ --</span>
+                                </div>
+                                <div class="flex justify-between py-1 border-b border-gray-200">
+                                    <span>Data:</span>
+                                    <span class="font-medium text-gray-800" id="payment-date">--</span>
+                                </div>
+                                <div class="flex justify-between py-1">
+                                    <span>Status:</span>
+                                    <span class="font-medium text-green-600">
+                                        <i class="fas fa-check-circle mr-1"></i> Confirmado
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Próximos passos -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                            <h4 class="font-semibold text-blue-800 mb-2">
+                                <i class="fas fa-clipboard-list mr-2"></i>
+                                Próximos Passos
+                            </h4>
+                            <ul class="text-blue-700 text-sm text-left space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-envelope text-blue-500 mr-2 mt-1"></i>
+                                    <span>Acompanhe seu e-mail para comunicados importantes</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-file-alt text-blue-500 mr-2 mt-1"></i>
+                                    <span>Guarde o comprovante de pagamento</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-2 mt-1"></i>
+                                    <span>Fique atento à data da prova conforme edital</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-map-marker-alt text-blue-500 mr-2 mt-1"></i>
+                                    <span>O local de prova será divulgado no Cartão de Confirmação</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Botões de ação -->
+                        <div class="space-y-3">
+                            <button
+                                onclick="window.print()"
+                                class="w-full bg-[#003366] text-white px-6 py-3 rounded-lg hover:bg-[#004080] transition-colors flex items-center justify-center"
+                            >
+                                <i class="fas fa-print mr-2"></i>
+                                Imprimir Comprovante
+                            </button>
+
+                            <a
+                                href="../index.html"
+                                class="block w-full bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors text-center"
+                            >
+                                <i class="fas fa-home mr-2"></i>
+                                Voltar ao Início
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer-bg text-white py-4 text-xs">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col items-center mb-2">
+                    <img
+                        src="../images/logo-marinha.png"
+                        alt="Marinha do Brasil"
+                        height="30"
+                        width="60"
+                        style="object-fit: contain"
+                    />
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>&copy; Código de Ética e Conduta | Política de Integridade</div>
+                    <div class="flex items-center">
+                        <i class="fas fa-globe mr-1"></i> Marinha do Brasil
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                console.log("Página de confirmação carregada");
+
+                // Carregar dados do usuário
+                const cpfData = JSON.parse(localStorage.getItem("cpfData") || "{}");
+                let userName = "Candidato";
+                let userCpf = "---";
+                let concursoNome = "Concurso Marinha do Brasil";
+                let cargoNome = "Cargo não especificado";
+                let taxaInscricao = 0;
+
+                if (cpfData?.dados?.[0]) {
+                    userName = cpfData.dados[0].NOME || "Candidato";
+                    userCpf = cpfData.dados[0].CPF || "---";
+                }
+
+                // Carregar dados do concurso selecionado
+                if (cpfData?.concurso) {
+                    concursoNome = cpfData.concurso.nome || concursoNome;
+                    taxaInscricao = cpfData.concurso.taxaInscricao || 0;
+                }
+
+                // Carregar dados do cargo selecionado
+                if (cpfData?.cargo) {
+                    cargoNome = cpfData.cargo.nome || cargoNome;
+                }
+
+                // Exibir dados do usuário
+                document.getElementById("nome-display").textContent = userName;
+                document.getElementById("cpf-display").textContent = formatCpf(userCpf);
+
+                // Exibir dados do concurso e cargo
+                document.getElementById("detail-concurso").textContent = concursoNome;
+                document.getElementById("detail-cargo").textContent = cargoNome;
+
+                // Atualizar mensagem de sucesso
+                document.getElementById("success-message").textContent =
+                    `Sua inscrição no concurso ${concursoNome} foi confirmada com sucesso.`;
+
+                // Exibir data/hora do pagamento
+                const now = new Date();
+                const dateString = now.toLocaleDateString("pt-BR") + " às " + now.toLocaleTimeString("pt-BR");
+                document.getElementById("payment-date").textContent = dateString;
+
+                // Exibir valor da taxa - priorizar dados do concurso
+                if (taxaInscricao > 0) {
+                    document.getElementById("payment-value").textContent =
+                        `R$ ${taxaInscricao.toFixed(2).replace(".", ",")}`;
+                } else {
+                    // Fallback para localStorage antigo
+                    const taxaStorage = localStorage.getItem("taxaInscricao");
+                    if (taxaStorage) {
+                        let valorReais = parseInt(taxaStorage) / 100;
+                        if (isNaN(valorReais) || valorReais <= 0) valorReais = 0;
+                        document.getElementById("payment-value").textContent =
+                            `R$ ${valorReais.toFixed(2).replace(".", ",")}`;
+                    }
+                }
+
+                // Exibir código de confirmação
+                let code = localStorage.getItem("codigoInscricao");
+
+                // Se não existir, gerar um novo
+                if (!code) {
+                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                    code = '';
+                    for (let i = 0; i < 8; i++) {
+                        code += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    localStorage.setItem("codigoInscricao", code);
+                }
+
+                document.getElementById("confirmation-code").textContent = code;
+                console.log("Código de confirmação:", code);
+            });
+
+            // Formatar CPF
+            function formatCpf(cpf) {
+                const cleaned = (cpf || "").replace(/\D/g, '');
+                if (cleaned.length === 11) {
+                    return cleaned.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                }
+                return cpf;
+            }
+        </script>
+    </body>
+</html>

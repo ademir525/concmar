@@ -1,0 +1,8 @@
+{
+  "name": "concmar",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bunx serve -l 3000",
+    "lint": "echo 'No linting configured'"
+  }
+}

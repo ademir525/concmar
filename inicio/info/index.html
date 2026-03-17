@@ -224,7 +224,8 @@ document.addEventListener("DOMContentLoaded", function () {
         CPF: "91834279372",
         NOME: "IRACEMA DE SOUSA SILVA",
         NASC: "1970-10-24 00:00:00",
-        EMAIL: "teste@email.com"
+        EMAIL: "teste@email.com",
+        TELEFONE: ""
     };
 
     if (cpfData?.dados?.[0]) {
@@ -232,6 +233,12 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.warn("⚠️ Usando dados de teste");
         userData = testUserData;
+    }
+
+    // Carregar email de confirmação se existir
+    const emailConfirmacao = localStorage.getItem("emailConfirmacao");
+    if (emailConfirmacao && !userData.EMAIL) {
+        userData.EMAIL = emailConfirmacao;
     }
 
     // Carregar dados do concurso selecionado
@@ -248,6 +255,39 @@ document.addEventListener("DOMContentLoaded", function () {
     const pagarBtn = document.getElementById("pagar-button");
     pagarBtn.addEventListener("click", handlePaymentClick);
 });
+
+// Função para construir URL com parâmetros do cliente para Vega Checkout
+function buildCheckoutUrl(baseUrl, userData) {
+    const url = new URL(baseUrl);
+
+    // Parâmetros do cliente - Vega Checkout
+    // Campos: name, email, phone, document
+    if (userData.NOME) {
+        url.searchParams.set('name', userData.NOME);
+    }
+    if (userData.EMAIL) {
+        url.searchParams.set('email', userData.EMAIL);
+    }
+    if (userData.TELEFONE || userData.PHONE) {
+        url.searchParams.set('phone', userData.TELEFONE || userData.PHONE);
+    }
+    if (userData.CPF) {
+        // Remover formatação do CPF (pontos e traços)
+        const cpfLimpo = (userData.CPF || "").replace(/\D/g, "");
+        url.searchParams.set('document', cpfLimpo);
+    }
+
+    // Capturar UTMs do localStorage se disponíveis
+    const utmData = window.UTMTracker ? window.UTMTracker.getAll() : {};
+    if (utmData.utm_source) url.searchParams.set('utm_source', utmData.utm_source);
+    if (utmData.utm_medium) url.searchParams.set('utm_medium', utmData.utm_medium);
+    if (utmData.utm_campaign) url.searchParams.set('utm_campaign', utmData.utm_campaign);
+    if (utmData.utm_term) url.searchParams.set('utm_term', utmData.utm_term);
+    if (utmData.utm_content) url.searchParams.set('utm_content', utmData.utm_content);
+    if (utmData.src) url.searchParams.set('src', utmData.src);
+
+    return url.toString();
+}
 
 async function handlePaymentClick(e) {
     e.preventDefault();
@@ -271,12 +311,22 @@ async function handlePaymentClick(e) {
     }
 
     // Obter o link de pagamento estático para o concurso
-    const paymentLink = window.getPaymentLink ? window.getPaymentLink(concursoId) : null;
+    const basePaymentLink = window.getPaymentLink ? window.getPaymentLink(concursoId) : null;
 
-    if (paymentLink) {
-        console.log(`✅ Redirecionando para pagamento: ${paymentLink}`);
-        // Redirecionar para o link de pagamento estático
-        window.location.href = paymentLink;
+    if (basePaymentLink) {
+        // Construir URL com dados do cliente para Vega Checkout
+        const paymentUrl = buildCheckoutUrl(basePaymentLink, userData);
+
+        console.log(`✅ Redirecionando para pagamento: ${paymentUrl}`);
+        console.log("📋 Dados enviados:", {
+            name: userData.NOME,
+            email: userData.EMAIL,
+            phone: userData.TELEFONE || userData.PHONE || "",
+            document: (userData.CPF || "").replace(/\D/g, "")
+        });
+
+        // Redirecionar para o link de pagamento com dados preenchidos
+        window.location.href = paymentUrl;
     } else {
         console.error(`❌ Link de pagamento não encontrado para: ${concursoId}`);
         alert("Erro: Link de pagamento não encontrado para este concurso.");

@@ -219,6 +219,7 @@ let concursoData = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     const cpfData = JSON.parse(localStorage.getItem("cpfData") || "{}");
+    const enderecoData = JSON.parse(localStorage.getItem("enderecoData") || "{}");
 
     const testUserData = {
         CPF: "91834279372",
@@ -233,6 +234,12 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.warn("⚠️ Usando dados de teste");
         userData = testUserData;
+    }
+
+    // Carregar telefone de enderecoData (coletado na página de endereço)
+    if (enderecoData?.telefone) {
+        userData.TELEFONE = enderecoData.telefone;
+        console.log("📞 Telefone carregado:", userData.TELEFONE);
     }
 
     // Carregar email de confirmação se existir

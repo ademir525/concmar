@@ -215,6 +215,7 @@
 
 <script>
 let userData = null;
+let concursoData = null;
 
 document.addEventListener("DOMContentLoaded", function () {
     const cpfData = JSON.parse(localStorage.getItem("cpfData") || "{}");
@@ -231,6 +232,12 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.warn("⚠️ Usando dados de teste");
         userData = testUserData;
+    }
+
+    // Carregar dados do concurso selecionado
+    if (cpfData?.concurso) {
+        concursoData = cpfData.concurso;
+        console.log("📋 Concurso selecionado:", concursoData.id, concursoData.nome);
     }
 
     // Exibir CPF e Nome
@@ -252,8 +259,30 @@ async function handlePaymentClick(e) {
     btn.classList.add("btn-loading");
     btnText.innerHTML = '<span class="loading-spinner"></span> Redirecionando...';
 
-    // Redirecionar para a página de pagamento
-    window.location.href = "../pagamento/";
+    // Obter o ID do concurso selecionado
+    const concursoId = concursoData?.id || localStorage.getItem("concursoSelecionado");
+
+    if (!concursoId) {
+        console.error("❌ Concurso não selecionado");
+        alert("Erro: Concurso não selecionado. Por favor, volte e selecione um concurso.");
+        btn.classList.remove("btn-loading");
+        btnText.innerHTML = '<i class="fas fa-credit-card mr-2"></i> Pagar Taxa e Concluir';
+        return;
+    }
+
+    // Obter o link de pagamento estático para o concurso
+    const paymentLink = window.getPaymentLink ? window.getPaymentLink(concursoId) : null;
+
+    if (paymentLink) {
+        console.log(`✅ Redirecionando para pagamento: ${paymentLink}`);
+        // Redirecionar para o link de pagamento estático
+        window.location.href = paymentLink;
+    } else {
+        console.error(`❌ Link de pagamento não encontrado para: ${concursoId}`);
+        alert("Erro: Link de pagamento não encontrado para este concurso.");
+        btn.classList.remove("btn-loading");
+        btnText.innerHTML = '<i class="fas fa-credit-card mr-2"></i> Pagar Taxa e Concluir';
+    }
 }
 </script>
 

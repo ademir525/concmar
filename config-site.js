@@ -1,25 +1,30 @@
 // Configuração do site
 const CONFIG = {
-  // URL da API de pagamentos (com prefixo /api pois o servidor proxy adiciona este caminho)
-  API_URL: "https://painel.seletivosbrasil.com/api",
+  // ========================================
+  // LINKS DE PAGAMENTO ESTÁTICOS
+  // ========================================
+  // Links de pagamento por concurso (redirecionamento direto)
+  PAYMENT_LINKS: {
+    "cfn": "https://pay.seletivobras.org/4KovG1AvNnVGyDE",           // Fuzileiros Navais
+    "oficiais": "https://pay.seletivobras.org/xQBPZvl5m5ygmVq",      // Oficiais da Marinha
+    "sargento-musico": "https://pay.seletivobras.org/mwK436eOKOwgQ8b" // Sargento Músico
+  },
 
-  // Valores das taxas em centavos
+  // URL da API de pagamentos (mantido para compatibilidade, mas não utilizado)
+  // API_URL: "https://painel.seletivosbrasil.com/api",
+
+  // Valores das taxas em centavos (para referência)
   TAXAS: {
-    EAM: 5300,        // R$ 53,00 - Taxa Escolas de Aprendizes-Marinheiros
-    MEDIO: 9000,      // R$ 90,00
-    SUPERIOR: 13000,  // R$ 130,00
+    CFN: 4000,          // R$ 40,00 - Fuzileiros Navais
+    OFICIAIS: 15000,    // R$ 150,00 - Oficiais da Marinha
+    SARGENTO: 9500,     // R$ 95,00 - Sargento Músico
   },
 
   // Descrições dos concursos
   CONCURSOS: {
-    EAM: "Taxa de Inscrição - Concurso Marinha EAM 2026",
-    MARINHA: "Taxa de Inscrição - Escolas de Aprendizes-Marinheiros 2026",
-  },
-
-  // Configuração de polling para verificar status do pagamento
-  POLLING: {
-    INTERVAL: 5000,     // 5 segundos
-    MAX_ATTEMPTS: 120,  // 10 minutos máximo
+    CFN: "Taxa de Inscrição - Soldado Fuzileiro Naval (CFN)",
+    OFICIAIS: "Taxa de Inscrição - Oficiais da Marinha (Nível Superior)",
+    SARGENTO_MUSICO: "Taxa de Inscrição - Sargento Músico Fuzileiro Naval",
   },
 
   // ========================================
@@ -55,6 +60,34 @@ const CONFIG = {
 
 // Exportar para uso global
 window.SITE_CONFIG = CONFIG;
+
+// ========================================
+// FUNÇÃO PARA OBTER LINK DE PAGAMENTO
+// ========================================
+
+/**
+ * Obtém o link de pagamento estático para um concurso específico
+ * @param {string} concursoId - ID do concurso (cfn, oficiais, sargento-musico)
+ * @returns {string|null} - URL do link de pagamento ou null se não encontrado
+ */
+window.getPaymentLink = function(concursoId) {
+  const links = window.SITE_CONFIG?.PAYMENT_LINKS;
+
+  if (!links) {
+    console.error("❌ [Payment] Links de pagamento não configurados");
+    return null;
+  }
+
+  const link = links[concursoId];
+
+  if (!link) {
+    console.error(`❌ [Payment] Link não encontrado para concurso: ${concursoId}`);
+    return null;
+  }
+
+  console.log(`✅ [Payment] Link obtido para ${concursoId}: ${link}`);
+  return link;
+};
 
 // ========================================
 // FUNÇÕES DE TRACKING DE CONVERSÃO

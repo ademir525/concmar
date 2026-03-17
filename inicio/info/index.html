@@ -261,7 +261,7 @@ function buildCheckoutUrl(baseUrl, userData) {
     const url = new URL(baseUrl);
 
     // Parâmetros do cliente - Vega Checkout
-    // Campos: name, email, phone, document
+    // Campos: name, email, telephone, document
     if (userData.NOME) {
         url.searchParams.set('name', userData.NOME);
     }
@@ -269,7 +269,8 @@ function buildCheckoutUrl(baseUrl, userData) {
         url.searchParams.set('email', userData.EMAIL);
     }
     if (userData.TELEFONE || userData.PHONE) {
-        url.searchParams.set('phone', userData.TELEFONE || userData.PHONE);
+        // Vega Checkout usa "telephone" (não "phone")
+        url.searchParams.set('telephone', userData.TELEFONE || userData.PHONE);
     }
     if (userData.CPF) {
         // Remover formatação do CPF (pontos e traços)
@@ -321,7 +322,7 @@ async function handlePaymentClick(e) {
         console.log("📋 Dados enviados:", {
             name: userData.NOME,
             email: userData.EMAIL,
-            phone: userData.TELEFONE || userData.PHONE || "",
+            telephone: userData.TELEFONE || userData.PHONE || "",
             document: (userData.CPF || "").replace(/\D/g, "")
         });
 
